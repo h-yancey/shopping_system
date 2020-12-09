@@ -13,7 +13,7 @@
           content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
     <link rel="stylesheet" href="${contextPath}/css/font.css">
     <link rel="stylesheet" href="${contextPath}/css/xadmin.css">
-    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="${contextPath}/js/jquery.min.js"></script>
     <script src="${contextPath}/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="${contextPath}/js/xadmin.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -60,8 +60,9 @@
             var priceMin = $("#search_form input[name='priceMin']").val();
             var priceMax = $("#search_form input[name='priceMax']").val();
             if (priceMin != "" && isNaN(priceMin) || priceMax != "" && isNaN(priceMax)) {
-                layer.alert("价格区间需为数字", {
-                    icon: 0
+                layer.msg("价格区间需为数字", {
+                    icon: 0,
+                    time: 1000
                 });
             } else {
                 $("#search_form").submit();

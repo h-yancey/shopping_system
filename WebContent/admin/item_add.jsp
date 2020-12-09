@@ -27,6 +27,25 @@
     <script>
         layui.use(['form', 'layer']);
 
+        function showLargeImg(src) {
+            layer.photos({
+                photos: {
+                    "title": "", //相册标题
+                    "id": 0, //相册id
+                    "start": 0, //初始显示的图片序号，默认0
+                    "data": [   //相册包含的图片，数组格式
+                        {
+                            "alt": "",
+                            "pid": 0, //图片id
+                            "src": src, //原图地址
+                            "thumb": "" //缩略图地址
+                        },
+                    ]
+                }
+                , anim: 0 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            })
+        }
+
         function isImg(value) {
             if (value == "") {
                 return true;
@@ -262,7 +281,7 @@
                 <label class="layui-form-label"><span class="x-red">*</span>商品图片</label>
                 <div class="layui-input-inline">
                     <div style="width: 100px;height: 100px;background: white">
-                        <img id="img_show" style="display: none" width="100" height="100">
+                        <img id="img_show" style="display: none" width="100" height="100" onclick="showLargeImg(this.src)">
                     </div>
                     <input type="file" class="layui-input" name="imgName" id="imgName">
                 </div>
