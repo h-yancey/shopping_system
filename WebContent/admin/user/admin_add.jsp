@@ -23,6 +23,8 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script>
+        var isExistUsername;
+
         function isAlphaNum(value) {
             if (!value.match('^[0-9a-zA-Z]*$')) {
                 return false;
@@ -54,12 +56,13 @@
                 return true;
             }, '年数差必须不能小于设定值');
 
+
             var validator = $("#save_form").validate({
                 rules: {
                     username: {
                         required: true,
                         alphaNum: true,
-                        rangelength: [3, 15]
+                        rangelength: [3, 15],
                     },
                     pwd: {
                         required: true,
@@ -69,7 +72,7 @@
                         required: true,
                         equalTo: '#pwd'
                     },
-                    sex: "required",
+                    sex: {},
                     truename: {
                         required: true,
                         chinese: true,
@@ -102,7 +105,8 @@
                     username: {
                         required: "用户名必填",
                         alphaNum: "用户名必须是字母或数字",
-                        rangelength: "用户名长度需为3-15个字符"
+                        rangelength: "用户名长度需为3-15个字符",
+
                     },
                     pwd: {
                         required: "密码必填",
@@ -144,7 +148,7 @@
             })
 
             $("#save_btn").click(function () {
-                if (validator.form()) {
+                if (validator.form() && !isExistUsername) {
                     var formData = $("#save_form").serializeArray();
                     var saveUrl = "${contextPath}/servlet/UserServlet?task=saveAdmin";
                     $.post(saveUrl, formData, function (jsonData) {
@@ -170,13 +174,12 @@
                 }
             })
 
-
             $("#reset_btn").click(function () {
                 validator.resetForm();
                 $("#username_tip").hide();
             });
 
-            $("#username").bind('input propertychange', (function () {
+            $("#username").bind('input propertychange', function () {
                 var username = $("#username").val();
                 if (isAlphaNum(username) && username.length >= 3 && username.length <= 15) {
                     var url = "${contextPath}/servlet/UserServlet?task=isExistUsername";
@@ -188,16 +191,19 @@
                         var message = jsonData.message;
                         if (flag) {
                             $("#username_tip").html(message).css("color", "red").show();
+                            isExistUsername = true;
                         } else {
                             $("#username_tip").html(message).css("color", "green").show();
+                            isExistUsername = false;
                         }
                     }, "json");
                 } else {
                     $("#username_tip").hide();
+                    return false;
                 }
 
-            }));
-        })
+            });
+        });
         layui.use(['form'], function () {
 
         });
@@ -270,7 +276,7 @@
                 </label>
                 <div class="layui-input-inline">
                     <select name="sex" id="sex">
-                        <option>请选择性别</option>
+                        <option value="">请选择性别</option>
                         <option value="男">男</option>
                         <option value="女">女</option>
                     </select>

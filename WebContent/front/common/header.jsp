@@ -28,9 +28,9 @@
 <body>
 <div class="container">
     <div class="logo">
-        <a href="${contextPath}">购 物 商 城</a></div>
-
-    <ul class="layui-nav left" lay-filter="">
+        <a href="${contextPath}">购 物 商 城</a>
+    </div>
+    <ul class="layui-nav left">
         <li class="layui-nav-item">
             <a href="${contextPath}"><i class="layui-icon layui-icon-home">&nbsp;首页</i></a>
         </li>
@@ -41,13 +41,23 @@
             <a href="javascript:;"><i class="layui-icon layui-icon-cart">&nbsp;购物车</i></a>
         </li>
     </ul>
-    <ul class="layui-nav right" lay-filter="">
-        <li class="layui-nav-item">
-            <a href="javascript:;">登录</a>
-        </li>
-        <li class="layui-nav-item">
-            <a href="/">注册</a>
-        </li>
+    <ul class="layui-nav right">
+        <c:if test="${empty frontUserBean}">
+            <li class="layui-nav-item">
+                <a href="${contextPath}/login.jsp">登录</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="${contextPath}/register.jsp">注册</a>
+            </li>
+        </c:if>
+        <c:if test="${not empty frontUserBean}">
+            <li class="layui-nav-item">
+                <a href="">${frontUserBean.username}</a>
+            </li>
+            <li class="layui-nav-item">
+                <a href="${contextPath}/servlet/FrontLoginServlet?task=logout">退出</a>
+            </li>
+        </c:if>
     </ul>
 </div>
 </body>

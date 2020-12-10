@@ -16,7 +16,6 @@
     <script src="${contextPath}/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="${contextPath}/js/jquery-validation/jquery.validate.js"></script>
     <script type="text/javascript" src="${contextPath}/js/jquery-validation/localization/messages_zh.js"></script>
-    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
@@ -132,12 +131,12 @@
                         layer.msg("请输入验证码", {icon: 7, time: 1000});
                     } else if (inputCode == code) {
                         var formData = $("#login_form").serializeArray();
-                        var loginUrl = "${contextPath}/servlet/LoginServlet?task=login";
+                        var loginUrl = "${contextPath}/servlet/FrontLoginServlet?task=login";
                         $.post(loginUrl, formData, function (jsonData) {
                             var flag = jsonData.flag;
                             var message = jsonData.message;
                             if (flag) {
-                                var indexUrl = "${contextPath}/admin/admin_index.jsp";
+                                var indexUrl = "${contextPath}";
                                 window.location.href = indexUrl;
                             } else {
                                 layer.alert(message, {icon: 2});
@@ -160,12 +159,12 @@
                             layer.msg("请输入验证码", {icon: 7, time: 1000});
                         } else if (inputCode == code) {
                             var formData = $("#login_form").serializeArray();
-                            var loginUrl = "${contextPath}/servlet/LoginServlet?task=login";
+                            var loginUrl = "${contextPath}/servlet/FrontLoginServlet?task=login";
                             $.post(loginUrl, formData, function (jsonData) {
                                 var flag = jsonData.flag;
                                 var message = jsonData.message;
                                 if (flag) {
-                                    var indexUrl = "${contextPath}/admin/admin_index.jsp";
+                                    var indexUrl = "${contextPath}";
                                     window.location.href = indexUrl;
                                 } else {
                                     layer.alert(message, {icon: 2});
@@ -213,7 +212,7 @@
         }
     </style>
 </head>
-<body class="login-bg">
+<body>
 <!-- 顶部开始 -->
 <div class="container">
     <div class="logo">
@@ -254,7 +253,7 @@
         <hr class="hr20">
         <input type="button" id="login_btn" value="登录">
         <hr class="hr20">
-        <a href="" style="float: right">免费注册</a>
+        <a href="${contextPath}/register.jsp" style="float: right">免费注册</a>
     </form>
 </div>
 </body>

@@ -25,7 +25,7 @@
                             <a class="" href="${contextPath}?itemType=${typeBean.typeId}">${typeBean.typeName}</a>
                             <ul>
                                 <c:forEach items="${typeBean.childTypeList}" var="childTypeBean">
-                                    <li><a href="${contextPath}?itemType=${typeBean.typeId}">&nbsp;&nbsp;-${childTypeBean.typeName}</a></li>
+                                    <li><a href="${contextPath}?itemType=${childTypeBean.typeId}">&nbsp;&nbsp;-${childTypeBean.typeName}</a></li>
                                 </c:forEach>
                             </ul>
                         </li>

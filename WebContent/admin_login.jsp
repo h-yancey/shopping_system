@@ -16,7 +16,6 @@
     <script src="${contextPath}/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="${contextPath}/js/jquery-validation/jquery.validate.js"></script>
     <script type="text/javascript" src="${contextPath}/js/jquery-validation/localization/messages_zh.js"></script>
-    <script src="https://cdn.staticfile.org/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
@@ -215,7 +214,7 @@
 </head>
 <body class="login-bg">
 <div class="login layui-anim layui-anim-up">
-    <div class="message">购物商城后台管理登录</div>
+    <div class="message">后台管理登录</div>
     <div id="darkbannerwrap"></div>
     <form class="layui-form layui-form-pane" id="login_form">
 

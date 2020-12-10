@@ -115,7 +115,7 @@
             </dl>
         </li>
         <li class="layui-nav-item to-index">
-            <a href="/">前台首页</a></li>
+            <a href="${contextPath}">前台首页</a></li>
     </ul>
 </div>
 <!-- 顶部结束 -->

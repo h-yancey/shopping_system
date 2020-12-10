@@ -253,7 +253,7 @@
                 </label>
                 <div class="layui-input-inline">
                     <select name="sex" id="sex">
-                        <option>请选择性别</option>
+                        <option value="">请选择性别</option>
                         <option value="男" ${userBean.sex == '男'?'selected':''}>男</option>
                         <option value="女" ${userBean.sex == '女'?'selected':''}>女</option>
                     </select>
