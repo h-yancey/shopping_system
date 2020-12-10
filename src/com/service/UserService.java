@@ -31,7 +31,7 @@ public class UserService {
         return userBean;
     }
 
-    public UserBean getUser(String username, String pwd) throws Exception {
+    private UserBean getUserByUP(String username, String pwd) throws Exception {
         if (GlobalUtil.isEmpty(username) || GlobalUtil.isEmpty(pwd)) {
             throw new Exception("参数不能为null");
         } else {
@@ -43,10 +43,20 @@ public class UserService {
         }
     }
 
-    public UserBean getAdmin(String username, String pwd) throws Exception {
-        UserBean userBean = this.getUser(username, pwd);
+    public UserBean getLoginAdmin(String username, String pwd) throws Exception {
+        UserBean userBean = this.getUserByUP(username, pwd);
         int authLevel = userBean.getAuthLevel();
         if (authLevel == 1 || authLevel == 5) {
+            return userBean;
+        } else {
+            throw new Exception("用户名或密码错误");
+        }
+    }
+
+    public UserBean getLoginUser(String username, String pwd) throws Exception {
+        UserBean userBean = this.getUserByUP(username, pwd);
+        int authLevel = userBean.getAuthLevel();
+        if (authLevel == 9) {
             return userBean;
         } else {
             throw new Exception("用户名或密码错误");

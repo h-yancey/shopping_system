@@ -220,11 +220,8 @@
                     <span class="x-red">*</span>性别
                 </label>
                 <div class="layui-input-inline">
-                    <select name="sex" id="sex">
-                        <option>请选择性别</option>
-                        <option value="男" ${userBean.sex == '男'?'selected':''}>男</option>
-                        <option value="女" ${userBean.sex == '女'?'selected':''}>女</option>
-                    </select>
+                    <input type="radio" name="sex" id="sex" value="男" title="男" ${userBean.sex == '男'?'checked':''}>
+                    <input type="radio" name="sex" value="女" title="女" ${userBean.sex == '女'?'checked':''}>
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <label for="sex" class="error"></label>

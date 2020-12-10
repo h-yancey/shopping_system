@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
         ResponseInfo responseInfo = new ResponseInfo();
         Gson gson = new Gson();
         try {
-            UserBean userBean = userService.getAdmin(username, pwd);
+            UserBean userBean = userService.getLoginAdmin(username, pwd);
             HttpSession session = req.getSession();
             session.setAttribute("userBean", userBean);
             userService.updateLoginParams(userBean);

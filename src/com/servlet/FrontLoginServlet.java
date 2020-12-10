@@ -44,7 +44,7 @@ public class FrontLoginServlet extends HttpServlet {
         ResponseInfo responseInfo = new ResponseInfo();
         Gson gson = new Gson();
         try {
-            UserBean userBean = userService.getAdmin(username, pwd);
+            UserBean userBean = userService.getLoginUser(username, pwd);
             String lockTag = userBean.getLockTag();
             if("1".equals(lockTag)){
                 //被冻结，禁止登录
