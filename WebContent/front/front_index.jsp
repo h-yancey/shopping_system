@@ -25,100 +25,229 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script>
-        function searchByType(typeId) {
-            var url = "${contextPath}/servlet/FrontItemServlet?task=list&itemType=" + typeId;
-            $("#body_iframe").attr("src", url);
+        layui.use(['form'], function () {
+        });
+
+        function submitSearchForm() {
+            var priceMin = $("#search_form input[name='priceMin']").val();
+            var priceMax = $("#search_form input[name='priceMax']").val();
+            if (priceMin != "" && isNaN(priceMin) || priceMax != "" && isNaN(priceMax)) {
+                layer.msg("价格区间需为数字", {
+                    icon: 0,
+                    time: 1000
+                });
+            } else {
+                var url = "${contextPath}?"
+                var formData = $("#search_form").serializeArray();
+                $.each(formData, function () {
+                    if (this.value != "") {
+                        url += this.name + "=" + this.value + "&";
+                    }
+                });
+
+                //$("#search_form").submit();
+                window.location.href = url.substring(0, url.length - 1);
+            }
         }
+
+        function clearSearchForm() {
+            $("#search_form input").val("");
+            $("#search_form select").val("");
+            //$("#search_form").submit();
+            window.location.href = "${contextPath}";
+        }
+
     </script>
     <style>
         .left-nav::-webkit-scrollbar { /*隐藏滚轮*/
             display: none;
         }
-    </style>
 
+        div.item {
+            height: 320px;
+            width: 100%;
+        }
+
+        div.item-pic {
+            margin: 0px auto;
+            width: 230px;
+            height: 230px;
+        }
+
+        img.item-img {
+            width: 100%;
+            height: 100%;
+        }
+
+        /*删格化5等份*/
+        .layui-col-lg2-4, .layui-col-md2-4, .layui-col-sm2-4, .layui-col-xs2-4 {
+            position: relative;
+            display: block;
+            box-sizing: border-box
+        }
+
+        .layui-col-xs2-4 {
+            float: left
+        }
+
+        .layui-col-xs2-4 {
+            width: 19.9999992%
+        }
+
+        .layui-col-xs-offset2-4 {
+            margin-left: 19.9999992%
+        }
+
+        @media screen and (min-width: 768px) {
+            .layui-col-sm2-4 {
+                float: left
+            }
+
+            .layui-col-sm2-4 {
+                width: 19.9999992%
+            }
+
+            .layui-col-sm-offset2-4 {
+                margin-left: 19.9999992%
+            }
+        }
+
+        @media screen and (min-width: 992px) {
+            .layui-col-md2-4 {
+                float: left
+            }
+
+            .layui-col-md2-4 {
+                width: 19.9999992%
+            }
+
+            .layui-col-md-offset2-4 {
+                margin-left: 19.9999992%
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            .layui-col-lg2-4 {
+                float: left
+            }
+
+            .layui-col-lg2-4 {
+                width: 19.9999992%
+            }
+
+            .layui-col-lg-offset2-4 {
+                margin-left: 19.9999992%
+            }
+        }
+    </style>
 </head>
 
 <body>
 <!-- 顶部开始 -->
-<div class="container">
-    <div class="logo">
-        <a href="./index.html">购 物 商 城</a></div>
-
-    <ul class="layui-nav left" lay-filter="">
-        <li class="layui-nav-item">
-            <a href="javascript:;"><i class="layui-icon layui-icon-home">&nbsp;首页</i></a>
-        </li>
-        <li class="layui-nav-item">
-            <a href="javascript:;"><i class="layui-icon layui-icon-user">&nbsp;会员中心</i></a>
-        </li>
-        <li class="layui-nav-item">
-            <a href="javascript:;"><i class="layui-icon layui-icon-cart">&nbsp;购物车</i></a>
-        </li>
-    </ul>
-    <ul class="layui-nav right" lay-filter="">
-        <li class="layui-nav-item">
-            <a href="javascript:;">登录</a>
-        </li>
-        <li class="layui-nav-item">
-            <a href="/">注册</a>
-        </li>
-    </ul>
-</div>
+<c:import url="common/header.jsp"></c:import>
 <!-- 顶部结束 -->
 
 <!-- 左侧菜单开始 -->
-<div class="left-nav" style="overflow-y:auto;">
-    <div id="side-nav">
+<c:import url="common/left.jsp"></c:import>
+<!-- 左侧菜单结束 -->
+
+<!-- 内容主体区域 -->
+<div class="page-content" style="overflow-y:auto;">
+    <div class="layui-fluid">
         <div class="layui-card">
             <div class="layui-card-body">
-                <div style="width: 100%;height: 200px;">
-                    <span>购物车 </span>
-                    <span>数量：</span>
-                    <span>金额：</span>
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-body ">
+                                <form id="search_form" class="layui-form layui-col-space5" autocomplete="off">
+                                    <div class="layui-input-inline layui-show-xs-block">
+                                        <select name="itemType">
+                                            <option value="">请选择分类</option>
+                                            <c:forEach items="${typeList}" var="typeBean">
+                                                <option value="${typeBean.typeId}" ${paramMap.itemTypeId == typeBean.typeId?"selected":""}>${typeBean.typeName}</option>
+                                                <c:forEach items="${typeBean.childTypeList}" var="childTypeBean">
+                                                    <option value="${childTypeBean.typeId}"
+                                                        ${paramMap.itemTypeId == childTypeBean.typeId?"selected":""}>&nbsp;&nbsp;&nbsp;&nbsp;${childTypeBean.typeName}
+                                                    </option>
+                                                </c:forEach>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+
+                                    <div class="layui-input-inline layui-show-xs-block">
+                                        <input class="layui-input" placeholder="请输入关键字" name="keyword" value="${paramMap.keyword}">
+                                    </div>
+
+                                    <div class="layui-input-inline" style="width: 100px;">
+                                        <input type="text" name="priceMin" placeholder="￥" autocomplete="off" class="layui-input" value="${paramMap.priceMin}">
+                                    </div>
+                                    <div class="layui-input-inline">-</div>
+                                    <div class="layui-input-inline" style="width: 100px;">
+                                        <input type="text" name="priceMax" placeholder="￥" autocomplete="off" class="layui-input" value="${paramMap.priceMax}">
+                                    </div>
+                                    <div class="layui-input-inline layui-show-xs-block">
+                                        <button type="button" class="layui-btn" onclick="submitSearchForm()">
+                                            <i class="layui-icon">&#xe615;</i></button>
+                                        <button type="button" class="layui-btn" onclick="clearSearchForm()">清空条件</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <c:set var="row" value="2" scope="page"></c:set>
+                <c:set var="col" value="5" scope="page"></c:set>
+                <c:forEach var="i" begin="0" end="${row-1}">
+                    <div class="layui-row layui-col-space25">
+                        <c:forEach var="j" begin="0" end="${col-1}">
+                            <c:if test="${i*col+j < itemList.size()}">
+                                <c:set var="itemBean" value="${itemList.get(i*col+j)}" scope="page"></c:set>
+                                <div class="layui-col-md2-4">
+                                    <div class="item">
+                                        <div class="item-pic">
+                                            <img src="${contextPath}/upload/${itemBean.imgName}" class="item-img">
+                                        </div>
+                                        <div style="border: 1px solid #C9C9C9;">
+                                            <div style="margin: 2px 0px 2px 2px;color: red;font-size: 18px">
+                                                ￥<strong>${itemBean.itemPrice}</strong>
+                                            </div>
+                                            <div style="margin: 2px 0px 2px 2px">
+                                                    ${itemBean.itemName}
+                                            </div>
+
+                                            <div style="height:40px;text-align: center">
+                                                <a href="${contextPath}?task=info&itemId=${itemBean.itemId}" class="layui-btn layui-btn-normal" style="width: 70px">详细信息</a>
+                                                <c:if test="${itemBean.shortageTag == '否'}">
+                                                    <a type="button" class="layui-btn layui-btn-danger" style="width: 70px">
+                                                        <i class="layui-icon layui-icon-cart-simple"></i>购买
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${itemBean.shortageTag == '是'}">
+                                                    <a type="button" class="layui-btn layui-btn-disabled layui-disabled" style="width: 70px" title="缺货" disabled>
+                                                        <i class="layui-icon layui-icon-cart-simple"></i>购买
+                                                    </a>
+                                                </c:if>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+                </c:forEach>
+
+            </div>
+            <div class="layui-card-body ">
+                <div class="page">
+                    ${pageTool}
                 </div>
             </div>
         </div>
-        <div class="layui-card">
-            <div class="layui-card-body">
-                <ul class="">
-                    <c:forEach items="${typeList}" var="typeBean">
-                        <li>
-                            <a class="" href="javascript:;" onclick="searchByType(${typeBean.typeId})">${typeBean.typeName}</a>
-                            <ul>
-                                <c:forEach items="${typeBean.childTypeList}" var="childTypeBean">
-                                    <li><a href="javascript:;" onclick="searchByType(${childTypeBean.typeId})">&nbsp;&nbsp;-${childTypeBean.typeName}</a></li>
-                                </c:forEach>
-                            </ul>
-                        </li>
-                    </c:forEach>
-                </ul>
-            </div>
-        </div>
 
-
-        <%--        <div class="layui-side-scroll">--%>
-        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-        <%--        <ul class="layui-nav layui-nav-tree" id="nav">--%>
-        <%--            <c:forEach items="${typeList}" var="typeBean">--%>
-        <%--                <li class="layui-nav-item layui-nav-itemed">--%>
-        <%--                    <a class="" href="javascript:;">${typeBean.typeName}</a>--%>
-        <%--                    <dl class="layui-nav-child">--%>
-        <%--                        <c:forEach items="${typeBean.childTypeList}" var="childTypeBean">--%>
-        <%--                            <dd><a href="javascript:;">${childTypeBean.typeName}</a></dd>--%>
-        <%--                        </c:forEach>--%>
-        <%--                    </dl>--%>
-        <%--                </li>--%>
-        <%--            </c:forEach>--%>
-        <%--        </ul>--%>
-        <%--        </div>--%>
     </div>
 </div>
-<!-- 左侧菜单结束 -->
-
-<div class="page-content">
-    <iframe src="${contextPath}/servlet/FrontItemServlet?task=list" frameborder="0" scrolling="yes" id="body_iframe" width="100%" height="100%"></iframe>
-</div>
-
 <!-- 中部开始 -->
 
 

@@ -192,14 +192,14 @@
                                         </div>
 
                                         <div style="height:40px;text-align: center">
-                                            <button type="button" class="layui-btn layui-btn-normal" style="width: 70px">详细信息</button>
+                                            <a href="/servlet/FrontItemServlet?task=info&itemId=${itemBean.itemId}" class="layui-btn layui-btn-normal" style="width: 70px">详细信息</a>
                                             <c:if test="${itemBean.shortageTag == '否'}">
                                                 <button type="button" class="layui-btn layui-btn-danger" style="width: 70px">
                                                     <i class="layui-icon layui-icon-cart-simple"></i>购买
                                                 </button>
                                             </c:if>
                                             <c:if test="${itemBean.shortageTag == '是'}">
-                                                <button type="button" class="layui-btn layui-btn-disabled" style="width: 70px" title="缺货" disabled>
+                                                <button type="button" class="layui-btn layui-btn-disabled layui-disabled" style="width: 70px" title="缺货" disabled>
                                                     <i class="layui-icon layui-icon-cart-simple"></i>购买
                                                 </button>
                                             </c:if>

@@ -44,6 +44,7 @@ public class ItemService {
 
     public ItemBean getItem(int itemId) throws Exception {
         ItemBean itemBean = itemDao.getItem(itemId);
+
         if (itemBean == null) {
             throw new Exception("您要修改的商品不存在");
         }
