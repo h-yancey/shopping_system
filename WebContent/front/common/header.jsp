@@ -35,7 +35,7 @@
             <a href="${contextPath}"><i class="layui-icon layui-icon-home">&nbsp;首页</i></a>
         </li>
         <li class="layui-nav-item">
-            <a href="javascript:;"><i class="layui-icon layui-icon-user">&nbsp;会员中心</i></a>
+            <a href="${contextPath}/member"><i class="layui-icon layui-icon-user">&nbsp;会员中心</i></a>
         </li>
         <li class="layui-nav-item">
             <a href="javascript:;"><i class="layui-icon layui-icon-cart">&nbsp;购物车</i></a>
@@ -53,9 +53,15 @@
         <c:if test="${not empty frontUserBean}">
             <li class="layui-nav-item">
                 <a href="">${frontUserBean.username}</a>
+                <dl class="layui-nav-child">
+                    <!-- 二级菜单 -->
+                    <dd><a href="${contextPath}/member">个人资料</a></dd>
+                    <dd><a href="${contextPath}/member?task=editPwd">密码修改</a></dd>
+                    <dd><a href="${contextPath}/servlet/FrontLoginServlet?task=logout">退出</a></dd>
+                </dl>
             </li>
             <li class="layui-nav-item">
-                <a href="${contextPath}/servlet/FrontLoginServlet?task=logout">退出</a>
+
             </li>
         </c:if>
     </ul>

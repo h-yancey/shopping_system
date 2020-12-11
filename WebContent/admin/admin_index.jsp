@@ -76,41 +76,41 @@
     <div class="left_open">
         <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
     </div>
-    <ul class="layui-nav left fast-add" lay-filter="">
-        <li class="layui-nav-item">
-            <a href="javascript:;">+新增</a>
-            <dl class="layui-nav-child">
-                <!-- 二级菜单 -->
-                <dd>
-                    <a onclick="xadmin.open('最大化','http://www.baidu.com','','',true)">
-                        <i class="iconfont">&#xe6a2;</i>弹出最大化</a>
-                </dd>
-                <dd>
-                    <a onclick="xadmin.open('弹出自动宽高','http://www.baidu.com')">
-                        <i class="iconfont">&#xe6a8;</i>弹出自动宽高</a>
-                </dd>
-                <dd>
-                    <a onclick="xadmin.open('弹出指定宽高','http://www.baidu.com',500,300)">
-                        <i class="iconfont">&#xe6a8;</i>弹出指定宽高</a>
-                </dd>
-                <dd>
-                    <a onclick="xadmin.add_tab('在tab打开','member-list.html')">
-                        <i class="iconfont">&#xe6b8;</i>在tab打开</a>
-                </dd>
-                <dd>
-                    <a onclick="xadmin.add_tab('在tab打开刷新','member-del.html',true)">
-                        <i class="iconfont">&#xe6b8;</i>在tab打开刷新</a>
-                </dd>
-            </dl>
-        </li>
-    </ul>
+<%--    <ul class="layui-nav left fast-add">--%>
+<%--        <li class="layui-nav-item">--%>
+<%--            <a href="javascript:;">+新增</a>--%>
+<%--            <dl class="layui-nav-child">--%>
+<%--                <!-- 二级菜单 -->--%>
+<%--                <dd>--%>
+<%--                    <a onclick="xadmin.open('最大化','http://www.baidu.com','','',true)">--%>
+<%--                        <i class="iconfont">&#xe6a2;</i>弹出最大化</a>--%>
+<%--                </dd>--%>
+<%--                <dd>--%>
+<%--                    <a onclick="xadmin.open('弹出自动宽高','http://www.baidu.com')">--%>
+<%--                        <i class="iconfont">&#xe6a8;</i>弹出自动宽高</a>--%>
+<%--                </dd>--%>
+<%--                <dd>--%>
+<%--                    <a onclick="xadmin.open('弹出指定宽高','http://www.baidu.com',500,300)">--%>
+<%--                        <i class="iconfont">&#xe6a8;</i>弹出指定宽高</a>--%>
+<%--                </dd>--%>
+<%--                <dd>--%>
+<%--                    <a onclick="xadmin.add_tab('在tab打开','member-list.html')">--%>
+<%--                        <i class="iconfont">&#xe6b8;</i>在tab打开</a>--%>
+<%--                </dd>--%>
+<%--                <dd>--%>
+<%--                    <a onclick="xadmin.add_tab('在tab打开刷新','member-del.html',true)">--%>
+<%--                        <i class="iconfont">&#xe6b8;</i>在tab打开刷新</a>--%>
+<%--                </dd>--%>
+<%--            </dl>--%>
+<%--        </li>--%>
+<%--    </ul>--%>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
             <a href="javascript:;">${userBean.username}</a>
             <dl class="layui-nav-child">
                 <!-- 二级菜单 -->
-                <dd><a onclick="xadmin.open('个人资料','${contextPath}/servlet/ProfileServlet?task=editProfile&userid=${userBean.userid}')">个人资料</a></dd>
-                <dd><a onclick="xadmin.open('修改密码','${contextPath}/servlet/ProfileServlet?task=editPwd&userid=${userBean.userid}')">修改密码</a></dd>
+                <dd><a onclick="xadmin.open('个人资料','${contextPath}/servlet/ProfileServlet?task=editProfile')">个人资料</a></dd>
+                <dd><a onclick="xadmin.open('密码修改','${contextPath}/servlet/ProfileServlet?task=editPwd')">密码修改</a></dd>
                 <dd class="close-all" data-type="closeall"><a href="javascript:;" onclick="logout()">退出</a></dd>
             </dl>
         </li>
@@ -187,12 +187,12 @@
                     <i class="iconfont nav_right">&#xe697;</i></a>
                 <ul class="sub-menu">
                     <li>
-                        <a onclick="xadmin.add_tab('个人资料','${contextPath}/servlet/ProfileServlet?task=editProfile&userid=${userBean.userid}')">
+                        <a onclick="xadmin.add_tab('个人资料','${contextPath}/servlet/ProfileServlet?task=editProfile')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>个人资料</cite></a>
                     </li>
                     <li>
-                        <a onclick="xadmin.add_tab('密码修改','${contextPath}/servlet/ProfileServlet?task=editPwd&userid=${userBean.userid}')">
+                        <a onclick="xadmin.add_tab('密码修改','${contextPath}/servlet/ProfileServlet?task=editPwd')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>密码修改</cite></a>
                     </li>

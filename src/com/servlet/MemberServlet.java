@@ -18,8 +18,8 @@ import java.io.PrintWriter;
 /**
  *
  */
-@WebServlet(urlPatterns = "/servlet/ProfileServlet")
-public class ProfileServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/member")
+public class MemberServlet extends HttpServlet {
     private UserService userService = new UserService();
 
     @Override
@@ -30,7 +30,7 @@ public class ProfileServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String task = req.getParameter("task");
-        if ("editProfile".equals(task)) {
+        if (GlobalUtil.isEmpty(task)) {
             editProfile(req, resp);
         } else if ("updateProfile".equals(task)) {
             updateProfile(req, resp);
@@ -45,7 +45,7 @@ public class ProfileServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         try {
-            String forwardUrl = "/admin/profile_edit.jsp";
+            String forwardUrl = "/front/pwd_edit";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,9 +61,8 @@ public class ProfileServlet extends HttpServlet {
 
     private void updateProfile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        UserBean loginUserBean = (UserBean) session.getAttribute("userBean");
-        int userid = loginUserBean.getUserid();
-
+        UserBean frontUserBean = (UserBean)session.getAttribute("frontUserBean");
+        int userid = frontUserBean.getUserid();
         String truename = req.getParameter("truename");
         String sex = req.getParameter("sex");
         String birth = req.getParameter("birth");
@@ -104,15 +103,14 @@ public class ProfileServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         try {
-            String forwardUrl = "/admin/pwd_edit.jsp";
+
+            String forwardUrl = "/front/profile_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();
             resp.setContentType("text/html");
-            //String redirectUrl = req.getContextPath() + "/servlet/ItemServlet?task=list";
             out.print("<script>");
             out.print("alert('" + e.getMessage() + "');");
-            // out.print("window.location.href='" + redirectUrl + "'");
             out.print("</script>");
         } finally {
             out.flush();
@@ -122,11 +120,11 @@ public class ProfileServlet extends HttpServlet {
 
     private void updatePwd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        UserBean userBean = (UserBean) session.getAttribute("userBean");
-        int userid = userBean.getUserid();
-
+        UserBean frontUserBean = (UserBean)session.getAttribute("frontUserBean");
+        int userid = frontUserBean.getUserid();
         String oldPwd = req.getParameter("oldPwd");
         String newPwd = req.getParameter("pwd");
+
 
         PrintWriter out = resp.getWriter();
         ResponseInfo responseInfo = new ResponseInfo();
