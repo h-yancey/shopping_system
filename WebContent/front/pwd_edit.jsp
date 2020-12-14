@@ -61,28 +61,23 @@
             $("#update_pwd_btn").click(function () {
                 if (validator.form()) {
                     var formData = $("#update_pwd_form").serializeArray();
-                    var saveUrl = "${contextPath}/servlet/ProfileServlet?task=updatePwd";
+                    var saveUrl = "${contextPath}/member?task=updatePwd";
                     $.post(saveUrl, formData, function (jsonData) {
                         var flag = jsonData.flag;
                         var message = jsonData.message;
                         if (flag) {
-                            layer.alert("密码修改成功", {
-                                    icon: 1
-                                },
-                                function () {
-                                    //关闭当前frame
-                                    xadmin.close();
-
-                                    // 可以对父窗口进行刷新
-                                    xadmin.father_reload();
-                                })
-                        } else {
-                            layer.alert("密码修改失败，原因：" + message, {
-                                icon: 2
+                            layer.msg("密码修改成功", {icon: 1, time: 1000}, function () {
+                                location.reload();
                             });
+                        } else {
+                            layer.alert("修改失败，原因：" + message, {icon: 2});
                         }
                     }, "json");
                 }
+            });
+
+            $("#reset_btn").click(function () {
+                validator.resetForm();
             });
 
         });
@@ -96,53 +91,95 @@
             margin-left: 10px;
             color: red;
         }
+
+        dl.member-dl {
+            text-align: left;
+            padding-left: 80px;
+        }
+
+        .member-dl dt {
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 50px;
+            color: #FFB800;
+        }
+
+        .member-dl dd {
+            font-size: 13px;
+            line-height: 25px;
+        }
+
+        .member-dl a:hover {
+            color: #FFB800;
+        }
     </style>
 </head>
 <body>
+<c:import url="common/header.jsp"></c:import>
+
 <div class="layui-fluid">
-    <div class="layui-row">
-        <form class="layui-form" autocomplete="off" id="update_pwd_form">
-            <div class="layui-form-item">
-                <label for="username" class="layui-form-label">用户名</label>
-                <div class="layui-input-inline">
-                    <input type="text" id="username" name="username" class="layui-input" value="${userBean.username}" disabled>
+    <div class="layui-card" style="margin-left: 300px;margin-right: 300px">
+        <div class="layui-card-body">
+            <div class="layui-row">
+                <div class="layui-col-md4">
+                    <div class="layui-show">
+                        <dl class="member-dl">
+                            <dt>会员中心</dt>
+                            <dd>
+                                <a href="${contextPath}/member">基本资料</a>
+                            </dd>
+                            <dd>
+                                <a href="${contextPath}/member?task=editPwd">密码修改</a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+                <div class="layui-col-md8" style="padding:10px;border: 1px solid #e6e6e6">
+                    <h2>密码修改</h2>
+                    <hr>
+                    <form class="layui-form" autocomplete="off" id="update_pwd_form">
+                        <div class="layui-form-item">
+                            <label for="oldPwd" class="layui-form-label">
+                                旧密码
+                            </label>
+                            <div class="layui-input-inline">
+                                <input type="password" id="oldPwd" name="oldPwd" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                <label for="oldPwd" class="error"></label>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="pwd" class="layui-form-label">
+                                新密码
+                            </label>
+                            <div class="layui-input-inline">
+                                <input type="password" id="pwd" name="pwd" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                <label for="pwd" class="error"></label>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label for="repwd" class="layui-form-label">
+                                确认密码
+                            </label>
+                            <div class="layui-input-inline">
+                                <input type="password" id="repwd" name="repwd" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                <label for="repwd" class="error"></label>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label"></label>
+                            <button type="button" class="layui-btn" id="update_pwd_btn">修改</button>
+                            <button type="reset" class="layui-btn layui-btn-primary" id="reset_btn">重置</button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <label for="oldPwd" class="layui-form-label">
-                    <span class="x-red">*</span>旧密码</label>
-                <div class="layui-input-inline">
-                    <input type="password" id="oldPwd" name="oldPwd" class="layui-input">
-                </div>
-                <div class="layui-form-mid layui-word-aux">
-                    <label for="oldPwd" class="error"></label>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label for="pwd" class="layui-form-label">
-                    <span class="x-red">*</span>新密码</label>
-                <div class="layui-input-inline">
-                    <input type="password" id="pwd" name="pwd" class="layui-input">
-                </div>
-                <div class="layui-form-mid layui-word-aux">
-                    <label for="pwd" class="error"></label>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label for="repwd" class="layui-form-label">
-                    <span class="x-red">*</span>确认密码</label>
-                <div class="layui-input-inline">
-                    <input type="password" id="repwd" name="repwd" class="layui-input">
-                </div>
-                <div class="layui-form-mid layui-word-aux">
-                    <label for="repwd" class="error"></label>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label"></label>
-                <button type="button" class="layui-btn" id="update_pwd_btn">修改密码</button>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 </body>

@@ -148,7 +148,7 @@
 <!-- 顶部结束 -->
 
 <!-- 左侧菜单开始 -->
-<c:import url="common/left.jsp"></c:import>
+<c:import url="common/index_left.jsp"></c:import>
 <!-- 左侧菜单结束 -->
 
 <!-- 内容主体区域 -->

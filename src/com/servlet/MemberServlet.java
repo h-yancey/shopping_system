@@ -45,7 +45,7 @@ public class MemberServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         try {
-            String forwardUrl = "/front/pwd_edit";
+            String forwardUrl = "/front/profile_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,7 +61,7 @@ public class MemberServlet extends HttpServlet {
 
     private void updateProfile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        UserBean frontUserBean = (UserBean)session.getAttribute("frontUserBean");
+        UserBean frontUserBean = (UserBean) session.getAttribute("frontUserBean");
         int userid = frontUserBean.getUserid();
         String truename = req.getParameter("truename");
         String sex = req.getParameter("sex");
@@ -86,6 +86,10 @@ public class MemberServlet extends HttpServlet {
         Gson gson = new Gson();
         try {
             userService.updateUser(userid, userBean);
+            //重新设置登录的用户
+            frontUserBean = userService.getUser(userid);
+            session.setAttribute("frontUserBean", frontUserBean);
+
             responseInfo.setFlag(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -104,7 +108,7 @@ public class MemberServlet extends HttpServlet {
 
         try {
 
-            String forwardUrl = "/front/profile_edit.jsp";
+            String forwardUrl = "/front/pwd_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();
@@ -120,7 +124,7 @@ public class MemberServlet extends HttpServlet {
 
     private void updatePwd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        UserBean frontUserBean = (UserBean)session.getAttribute("frontUserBean");
+        UserBean frontUserBean = (UserBean) session.getAttribute("frontUserBean");
         int userid = frontUserBean.getUserid();
         String oldPwd = req.getParameter("oldPwd");
         String newPwd = req.getParameter("pwd");
