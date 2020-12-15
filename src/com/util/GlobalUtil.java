@@ -1,5 +1,7 @@
 package com.util;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -46,5 +48,11 @@ public class GlobalUtil {
 
     public static String getTimeStamp() {
         return String.valueOf(new Date().getTime());
+    }
+
+    public static String formatBigDecimal(BigDecimal bigDecimal) {
+        DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
+        String formatStr = decimalFormat.format(bigDecimal);
+        return formatStr;
     }
 }

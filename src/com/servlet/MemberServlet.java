@@ -41,6 +41,15 @@ public class MemberServlet extends HttpServlet {
         }
     }
 
+    /**
+     * 重新设置登录的用户
+     */
+    private void refreshLoginFrontUser(HttpServletRequest req, int userid) throws Exception {
+        HttpSession session = req.getSession();
+        UserBean frontUserBean = userService.getUser(userid);
+        session.setAttribute("frontUserBean", frontUserBean);
+    }
+
     private void editProfile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
 
@@ -86,10 +95,7 @@ public class MemberServlet extends HttpServlet {
         Gson gson = new Gson();
         try {
             userService.updateUser(userid, userBean);
-            //重新设置登录的用户
-            frontUserBean = userService.getUser(userid);
-            session.setAttribute("frontUserBean", frontUserBean);
-
+            this.refreshLoginFrontUser(req, userid);
             responseInfo.setFlag(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,7 +113,6 @@ public class MemberServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         try {
-
             String forwardUrl = "/front/pwd_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
@@ -135,6 +140,7 @@ public class MemberServlet extends HttpServlet {
         Gson gson = new Gson();
         try {
             userService.updatePwd(userid, oldPwd, newPwd);
+            this.refreshLoginFrontUser(req, userid);
             responseInfo.setFlag(true);
         } catch (Exception e) {
             responseInfo.setFlag(false);

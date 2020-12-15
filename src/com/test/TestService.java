@@ -4,6 +4,7 @@ import com.bean.ItemBean;
 import com.service.ItemService;
 import com.util.GlobalUtil;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +28,13 @@ public class TestService {
 //
 //        itemService.deleteItem(3);
 
-        String str="2020-11-29 22:55:53";
-        Date date = GlobalUtil.formatDate(str);
-        System.out.println(date);
+//        String str="2020-11-29 22:55:53";
+//        Date date = GlobalUtil.formatDate(str);
+//        System.out.println(date);
+//        int i = (Integer)null;
+//        System.out.println(i);
+        BigDecimal bigDecimal = new BigDecimal(5000.59);
+        String s = GlobalUtil.formatBigDecimal(bigDecimal);
+        System.out.println(s);
     }
 }

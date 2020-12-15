@@ -2,6 +2,7 @@ package com.bean;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  *
@@ -109,5 +110,18 @@ public class ItemBean {
 
     public void setSmallTypeName(String smallTypeName) {
         this.smallTypeName = smallTypeName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemBean itemBean = (ItemBean) o;
+        return itemId == itemBean.itemId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(itemId);
     }
 }

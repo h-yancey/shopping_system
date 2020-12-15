@@ -53,7 +53,6 @@
         function clearSearchForm() {
             $("#search_form input").val("");
             $("#search_form select").val("");
-            //$("#search_form").submit();
             window.location.href = "${contextPath}";
         }
 
@@ -148,7 +147,7 @@
 <!-- 顶部结束 -->
 
 <!-- 左侧菜单开始 -->
-<c:import url="common/index_left.jsp"></c:import>
+<c:import url="common/left.jsp"></c:import>
 <!-- 左侧菜单结束 -->
 
 <!-- 内容主体区域 -->
@@ -220,12 +219,12 @@
                                             <div style="height:40px;text-align: center">
                                                 <a href="${contextPath}?task=info&itemId=${itemBean.itemId}" class="layui-btn layui-btn-normal" style="width: 70px">详细信息</a>
                                                 <c:if test="${itemBean.shortageTag == '否'}">
-                                                    <a type="button" class="layui-btn layui-btn-danger" style="width: 70px">
+                                                    <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="addCartItem(${itemBean.itemId})" style="width: 70px">
                                                         <i class="layui-icon layui-icon-cart-simple"></i>购买
                                                     </a>
                                                 </c:if>
                                                 <c:if test="${itemBean.shortageTag == '是'}">
-                                                    <a type="button" class="layui-btn layui-btn-disabled layui-disabled" style="width: 70px" title="缺货" disabled>
+                                                    <a class="layui-btn layui-btn-disabled layui-disabled" style="width: 70px" title="缺货" disabled>
                                                         <i class="layui-icon layui-icon-cart-simple"></i>购买
                                                     </a>
                                                 </c:if>

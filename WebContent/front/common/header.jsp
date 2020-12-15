@@ -40,7 +40,7 @@
             <a href="${contextPath}/member"><i class="layui-icon layui-icon-user">&nbsp;会员中心</i></a>
         </li>
         <li class="layui-nav-item">
-            <a href="javascript:;"><i class="layui-icon layui-icon-cart">&nbsp;购物车</i></a>
+            <a href="${contextPath}/cart"><i class="layui-icon layui-icon-cart">&nbsp;购物车</i></a>
         </li>
     </ul>
     <ul class="layui-nav right">

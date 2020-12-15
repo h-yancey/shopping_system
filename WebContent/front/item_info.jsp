@@ -67,7 +67,7 @@
 <!-- 顶部结束 -->
 
 <!-- 左侧菜单开始 -->
-<c:import url="common/index_left.jsp"></c:import>
+<c:import url="common/left.jsp"></c:import>
 <!-- 左侧菜单结束 -->
 
 <!-- 内容主体区域 -->
@@ -119,19 +119,21 @@
                         </div>
                     </div>
                     <div class="layui-col-md2">
-                        <a href="${contextPath}" class="layui-btn layui-btn-warm" style="width: 70px;float:right" >返回</a>
+                        <a href="${contextPath}" class="layui-btn layui-btn-warm" style="width: 70px;float:right" >
+                            <i class="layui-icon layui-icon-return"></i>返回
+                        </a>
                     </div>
                 </div>
                 <div class="layui-row">
                     <div class="layui-col-md12">
                         <div style="text-align: center;margin-top:30px">
                             <c:if test="${itemBean.shortageTag == '否'}">
-                                <a type="button" class="layui-btn layui-btn-danger layui-btn-lg" style="width: 150px">
+                                <a href="javascript:;" class="layui-btn layui-btn-danger layui-btn-lg"  onclick="addCartItem(${itemBean.itemId})" style="width: 150px">
                                     <i class="layui-icon layui-icon-cart-simple"></i> 购 买
                                 </a>
                             </c:if>
                             <c:if test="${itemBean.shortageTag == '是'}">
-                                <a type="button" class="layui-btn layui-btn-disabled layui-btn-lg layui-disabled" style="width: 150px" title="缺货" disabled>
+                                <a class="layui-btn layui-btn-disabled layui-btn-lg layui-disabled" style="width: 150px" title="缺货" disabled>
                                     <i class="layui-icon layui-icon-cart-simple"></i> 购 买
                                 </a>
                             </c:if>
