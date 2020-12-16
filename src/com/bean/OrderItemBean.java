@@ -1,6 +1,7 @@
 package com.bean;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  *
@@ -91,4 +92,5 @@ public class OrderItemBean {
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
+
 }

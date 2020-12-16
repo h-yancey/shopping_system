@@ -112,16 +112,4 @@ public class ItemBean {
         this.smallTypeName = smallTypeName;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ItemBean itemBean = (ItemBean) o;
-        return itemId == itemBean.itemId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(itemId);
-    }
 }

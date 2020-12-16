@@ -76,7 +76,6 @@
         }
 
         jQuery(function () {
-
             jQuery.validator.addMethod("twoDecimalPlace", function (value, element) {
                 inputZ = value;
                 var arr = inputZ.split(".");    //截取字符串

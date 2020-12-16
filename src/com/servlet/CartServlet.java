@@ -1,10 +1,10 @@
 package com.servlet;
 
 import com.bean.ItemBean;
+import com.bean.OrderItemBean;
 import com.google.gson.Gson;
 import com.service.ItemService;
 import com.util.GlobalUtil;
-import com.util.ResponseInfo;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -40,6 +40,8 @@ public class CartServlet extends HttpServlet {
             delete(req, resp);
         } else if ("clear".equals(task)) {
             clear(req, resp);
+        } else if ("updateCartItemCount".equals(task)) {
+            updateCartItemCount(req, resp);
         }
     }
 
@@ -51,47 +53,46 @@ public class CartServlet extends HttpServlet {
 
     private void add(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
-        Map<ItemBean, Integer> cartMap = (LinkedHashMap<ItemBean, Integer>) session.getAttribute("cartMap");
-        Integer cartNum = (Integer) session.getAttribute("cartNum");
-        BigDecimal cartMoney = (BigDecimal) session.getAttribute("cartMoney");
-        Set<Integer> typeSet = (HashSet<Integer>) session.getAttribute("typeSet");
-        if (cartMap == null) {
-            cartMap = new LinkedHashMap<ItemBean, Integer>();
-        }
-        if (cartNum == null) {
-            cartNum = 0;
-        }
-        if (cartMoney == null) {
-            cartMoney = new BigDecimal(0);
-        }
-        if (typeSet == null) {
-            typeSet = new HashSet<>();
+        Set<OrderItemBean> cartItemSet = (LinkedHashSet<OrderItemBean>) session.getAttribute("cartItemSet");//购物车中的商品集合
+        if (cartItemSet == null) {
+            cartItemSet = new LinkedHashSet<>();
         }
 
         String itemId = req.getParameter("itemId");
         try {
-            ItemBean addItem = itemService.getItem(Integer.parseInt(itemId));
-            if (cartMap.containsKey(addItem)) {
-                cartMap.put(addItem, cartMap.get(addItem) + 1);
-            } else {
-                cartMap.put(addItem, 1);
+            ItemBean itemBean = itemService.getItem(Integer.parseInt(itemId));
+            OrderItemBean addOrderItem = new OrderItemBean();
+            addOrderItem.setItemId(itemBean.getItemId());
+            addOrderItem.setItemName(itemBean.getItemName());
+            addOrderItem.setItemDesc(itemBean.getItemDesc());
+            addOrderItem.setImgName(itemBean.getImgName());
+            addOrderItem.setItemPrice(itemBean.getItemPrice());
+            boolean containFlag = false;
+            for (OrderItemBean orderItemBean : cartItemSet) {
+                if (orderItemBean.getItemId() == addOrderItem.getItemId()) {
+                    containFlag = true;
+                    orderItemBean.setItemCount(orderItemBean.getItemCount() + 1);
+                    orderItemBean.setTotalPrice(orderItemBean.getItemPrice().multiply(new BigDecimal(orderItemBean.getItemCount())));
+                    break;
+                }
             }
-            cartNum++;
-            typeSet.add(addItem.getSmallTypeId());
-            cartMoney = cartMoney.add(addItem.getItemPrice());
+            if (!containFlag) {
+                addOrderItem.setItemCount(1);
+                addOrderItem.setTotalPrice(addOrderItem.getItemPrice());
+                cartItemSet.add(addOrderItem);
+            }
+            session.setAttribute("cartItemSet", cartItemSet);
+            this.refreshCart(session);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        session.setAttribute("cartMap", cartMap);
-        session.setAttribute("cartNum", cartNum);
-        session.setAttribute("typeSet", typeSet);
-        session.setAttribute("cartMoney", cartMoney);
         PrintWriter out = resp.getWriter();
         Gson gson = new Gson();
         Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("cartNum", cartNum);
-        returnMap.put("typeCount", typeSet.size());
-        returnMap.put("cartMoney", GlobalUtil.formatBigDecimal(cartMoney));
+        returnMap.put("cartItemCount", session.getAttribute("cartItemCount"));
+        returnMap.put("typeCount", ((Set) session.getAttribute("typeSet")).size());
+        returnMap.put("cartTotalPrice", GlobalUtil.formatBigDecimal((BigDecimal) session.getAttribute("cartTotalPrice")));
+
         String json = gson.toJson(returnMap);
         out.print(json);
         out.flush();
@@ -100,30 +101,95 @@ public class CartServlet extends HttpServlet {
 
     private void delete(HttpServletRequest req, HttpServletResponse resp) {
         String itemId = req.getParameter("itemId");
-        ItemBean deleteItem = null;
-        try {
-            deleteItem = itemService.getItem(Integer.parseInt(itemId));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         HttpSession session = req.getSession();
-        Map<ItemBean, Integer> cartMap = (LinkedHashMap<ItemBean, Integer>) session.getAttribute("cartMap");
-        Integer cartNum = (Integer) session.getAttribute("cartNum");
-        BigDecimal cartMoney = (BigDecimal) session.getAttribute("cartMoney");
-        Integer removeNum = cartMap.remove(deleteItem);
-        cartNum -= removeNum;
-        cartMoney = cartMoney.subtract(deleteItem.getItemPrice().multiply(new BigDecimal(removeNum)));
-        session.setAttribute("cartMap", cartMap);
-        session.setAttribute("cartNum", cartNum);
-        session.setAttribute("cartMoney", cartMoney);
+        Set<OrderItemBean> cartItemSet = (LinkedHashSet<OrderItemBean>) session.getAttribute("cartItemSet");
+        Iterator<OrderItemBean> iterator = cartItemSet.iterator();
+        OrderItemBean deleteOrderItem = null;
+        while (iterator.hasNext()) {
+            deleteOrderItem = iterator.next();
+            if (deleteOrderItem.getItemId() == Integer.parseInt(itemId)) {
+                iterator.remove();
+                break;
+            }
+        }
+        session.setAttribute("cartItemSet", cartItemSet);
+        this.refreshCart(session);
+//        Integer cartItemCount = (Integer) session.getAttribute("cartItemCount");
+//        BigDecimal cartTotalPrice = (BigDecimal) session.getAttribute("cartTotalPrice");
+//        int deleteItemCount = deleteOrderItem == null ? 0 : deleteOrderItem.getItemCount();
+//        cartItemCount -= deleteItemCount;
+//        cartTotalPrice = cartTotalPrice.subtract(deleteOrderItem.getItemPrice().multiply(new BigDecimal(deleteItemCount)));
+//        session.setAttribute("cartItemSet", cartItemSet);
+//        session.setAttribute("cartItemCount", cartItemCount);
+//        session.setAttribute("cartTotalPrice", cartTotalPrice);
     }
 
     private void clear(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession();
-        session.removeAttribute("cartMap");
-        session.removeAttribute("cartNum");
-        session.removeAttribute("cartMoney");
+        session.removeAttribute("cartItemSet");
+        session.removeAttribute("cartItemCount");
+        session.removeAttribute("cartTotalPrice");
         session.removeAttribute("typeSet");
+    }
+
+    private void updateCartItemCount(HttpServletRequest req, HttpServletResponse resp) {
+        String itemId = req.getParameter("itemId");
+        int newItemCount = Integer.parseInt(req.getParameter("itemCount"));
+
+        HttpSession session = req.getSession();
+        Set<OrderItemBean> cartItemSet = (LinkedHashSet<OrderItemBean>) session.getAttribute("cartItemSet");
+
+        for (OrderItemBean orderItemBean : cartItemSet) {
+            if (orderItemBean.getItemId() == Integer.parseInt(itemId)) {
+                orderItemBean.setItemCount(newItemCount);
+                orderItemBean.setTotalPrice(orderItemBean.getItemPrice().multiply(new BigDecimal(orderItemBean.getItemCount())));
+                break;
+            }
+        }
+        session.setAttribute("cartItemSet", cartItemSet);
+        this.refreshCart(session);
+//        Integer cartItemCount = (Integer) session.getAttribute("cartItemCount");
+//        BigDecimal cartTotalPrice = (BigDecimal) session.getAttribute("cartTotalPrice");
+//        //修改商品数量
+//        cartItemSet.put(itemBean, newItemCount);
+//        int oldItemCount = cartItemSet.get(itemBean);
+//        //计算商品数量修改前后的差值
+//        int diffCount = newItemCount - oldItemCount;
+//        //修改商品总个数
+//        cartItemCount += diffCount;
+//        BigDecimal itemPrice = itemBean.getItemPrice();
+//        //修改商品总金额
+//        cartTotalPrice = cartTotalPrice.add(itemPrice.multiply(new BigDecimal(diffCount)));
+//
+//        session.setAttribute("cartItemCount", cartItemCount);
+//        session.setAttribute("cartTotalPrice", cartTotalPrice);
+    }
+
+    private void refreshCart(HttpSession session) {
+        Set<OrderItemBean> cartItemSet = (LinkedHashSet<OrderItemBean>) session.getAttribute("cartItemSet");
+        if (cartItemSet == null) {
+            session.removeAttribute("cartItemCount");
+            session.removeAttribute("typeSet");
+            session.removeAttribute("cartTotalPrice");
+        } else {
+            int cartItemCount = 0;
+            BigDecimal cartTotalPrice = new BigDecimal(0);
+            Set<Integer> typeSet = new HashSet<>();
+            for (OrderItemBean orderItemBean : cartItemSet) {
+                cartItemCount += orderItemBean.getItemCount();
+                cartTotalPrice = cartTotalPrice.add(orderItemBean.getTotalPrice());
+                int itemId = orderItemBean.getItemId();
+                try {
+                    ItemBean itemBean = itemService.getItem(itemId);
+                    typeSet.add(itemBean.getSmallTypeId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            session.setAttribute("cartItemCount", cartItemCount);
+            session.setAttribute("typeSet", typeSet);
+            session.setAttribute("cartTotalPrice", cartTotalPrice);
+        }
     }
 }

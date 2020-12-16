@@ -10,12 +10,12 @@
             var url = "${contextPath}/cart?task=add";
             $.post(url, {itemId: itemId}, function (jsonData) {
                 layer.msg("成功添加到购物车", {icon: 1, time: 1000}, function () {
-                    var cartNum = jsonData.cartNum;
+                    var cartItemCount = jsonData.cartItemCount;
                     var typeCount = jsonData.typeCount;
-                    var cartMoney = jsonData.cartMoney;
-                    $("#cartNum").html(cartNum);
+                    var cartTotalPrice = jsonData.cartTotalPrice;
+                    $("#cartItemCount").html(cartItemCount);
                     $("#typeCount").html(typeCount);
-                    $("#cartMoney").html(cartMoney);
+                    $("#cartTotalPrice").html(cartTotalPrice);
                 });
             }, "json");
         }
@@ -45,9 +45,9 @@
             <div class="layui-show">
                 <dl class="cart-dl">
                     <dt> 购物车</dt>
-                    <dd> 商品总个数：<span id="cartNum">${empty cartNum?0:cartNum}</span></dd>
+                    <dd> 商品总个数：<span id="cartItemCount">${empty cartItemCount?0:cartItemCount}</span></dd>
                     <dd> 商品种类总数：<span id="typeCount">${empty typeSet?0:typeSet.size()}</span></dd>
-                    <dd> 总金额：￥<span id="cartMoney"><fmt:formatNumber value="${empty cartMoney?0:cartMoney}" pattern="#,##0.00"></fmt:formatNumber></span></dd>
+                    <dd> 总金额：￥<span id="cartTotalPrice"><fmt:formatNumber value="${empty cartTotalPrice?0:cartTotalPrice}" pattern="#,##0.00"></fmt:formatNumber></span></dd>
                 </dl>
             </div>
         </div>

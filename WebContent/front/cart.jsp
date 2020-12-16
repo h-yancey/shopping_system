@@ -21,8 +21,6 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script>
-        layui.use(['form', 'layer'], function () {
-        });
 
         function deleteCartItem(itemId) {
             layer.confirm("是否从购物车中删除该商品？", {btn: ['是', '否']}, function () {
@@ -48,6 +46,36 @@
                 });
             });
         }
+
+        function updateCartItemCount(itemId, itemCount) {
+            if (itemCount.match('^[0-9]*$')) {
+                var url = "${contextPath}/cart?task=updateCartItemCount";
+                var data = {
+                    itemId: itemId,
+                    itemCount: itemCount
+                }
+                $.post(url, data, function () {
+                    layer.msg("数量修改成功", {icon: 1, time: 1000}, function () {
+                        //location.reload();
+                    });
+                });
+            } else {
+                layer.msg("数量必须是自然数", {icon: 2, time: 1000}, function () {
+                    var defaultVal = $("#itemCount").attr("default-val");
+                    $("#itemCount").val(defaultVal);
+                });
+            }
+        }
+
+        function decCartItemCount(itemId) {
+            var itemCount = $("itemCount").val() - 1;
+            updateCartItemCount(itemId, itemCount);
+        }
+
+        function incCartItemCount(itemId) {
+            var itemCount = $("itemCount").val() + 1;
+            updateCartItemCount(itemId, itemCount);
+        }
     </script>
     <style>
 
@@ -61,43 +89,52 @@
         <div class="layui-card-body">
             <div class="layui-row">
                 <table class="layui-table layui-form" width="100%">
-                    <c:if test="${empty cartMap}">
+                    <c:if test="${empty cartItemSet}">
                         <tr>
                             <td colspan="8" align="center" style="font-size: 20px;"><i class="layui-icon-tips layui-icon"></i>
                                 您的购物车空空如也，去<a href="${contextPath}" style="color: #FFB800;">购物</a>吧
                             </td>
                         </tr>
                     </c:if>
-                    <c:if test="${not empty cartMap}">
+                    <c:if test="${not empty cartItemSet}">
                         <thead>
                         <tr>
                                 <%--                            <th width="20"><input type="checkbox" name="" lay-skin="primary"></th>--%>
-                            <th width="30%">商品名称</th>
-                            <th width="15%">商品缩略图</th>
-                            <th width="15%">商品单价</th>
-                            <th width="10%">商品数量</th>
-                            <th width="15%">商品小计</th>
-                            <th width="15%">操作</th>
+                            <th width="25%">商品名称</th>
+                            <th width="15%" style="text-align: center">商品缩略图</th>
+                            <th width="15%" style="text-align: right">商品单价</th>
+                            <th width="20%" style="text-align: center">商品数量</th>
+                            <th width="15%" style="text-align: right">商品小计</th>
+                            <th width="10%" style="text-align: center">操作</th>
                         </thead>
                         <tbody>
 
-                        <c:forEach items="${cartMap}" var="entry">
+                        <c:forEach items="${cartItemSet}" var="orderItemBean">
                             <tr>
                                     <%--                                <td><input type="checkbox" name="" lay-skin="primary"></td>--%>
-                                <c:set value="${entry.key}" var="itemBean"></c:set>
-                                <td>${itemBean.itemName}</td>
-                                <td><img src="${contextPath}/upload/${itemBean.imgName}"></td>
-                                <td align="right">￥<fmt:formatNumber value="${itemBean.itemPrice}" pattern="#,###.00"></fmt:formatNumber></td>
-                                <td align="right">
-                                    <input type="text" class="layui-input" value="${entry.value}">
+                                <td>${orderItemBean.itemName}</td>
+                                <td align="center"><img src="${contextPath}/upload/${orderItemBean.imgName}"></td>
+                                <td align="right">￥<fmt:formatNumber value="${orderItemBean.itemPrice}" pattern="#,###.00"></fmt:formatNumber></td>
+                                <td align="center">
+                                    <div>
+                                        <a href="javascript:;" class="layui-btn layui-btn-xs" style="width: 30px;height: 30px" onclick="decCartItemCount(${orderItemBean.itemId})">
+                                            <i class="layui-icon">-</i>
+                                        </a>
+                                        <input type="text" class="layui-input layui-input-inline" onblur="updateCartItemCount(${orderItemBean.itemId},this.value)"
+                                               value="${orderItemBean.itemCount}"  style="text-align: center;height: 30px;width: 40px;padding: 0px">
+                                        <a href="javascript:;" class="layui-btn layui-btn-xs" style="width: 30px;height: 30px" onclick="incCartItemCount(${orderItemBean.itemId})">
+                                            <i class="layui-icon">+</i>
+                                        </a>
+                                    </div>
+
                                 </td>
-                                <td align="right">￥<fmt:formatNumber value="${itemBean.itemPrice*entry.value}" pattern="#,###.00"></fmt:formatNumber></td>
-                                <td class="td-manage">
+                                <td align="right">￥<fmt:formatNumber value="${orderItemBean.totalPrice}" pattern="#,###.00"></fmt:formatNumber></td>
+                                <td class="td-manage" align="center">
                                         <%--                                <button class="layui-btn layui-btn layui-btn-xs"--%>
-                                        <%--                                        onclick="xadmin.open('编辑商品','${contextPath}/servlet/ItemServlet?task=edit&itemId=${itemBean.itemId}')">--%>
+                                        <%--                                        onclick="xadmin.open('编辑商品','${contextPath}/servlet/ItemServlet?task=edit&itemId=${orderItemBean.itemId}')">--%>
                                         <%--                                    <i class="layui-icon">&#xe642;</i>编辑--%>
                                         <%--                                </button>--%>
-                                    <a class="layui-btn-danger layui-btn layui-btn-xs" onclick="deleteCartItem(${itemBean.itemId})" href="javascript:;">
+                                    <a class="layui-btn-danger layui-btn layui-btn-xs" onclick="deleteCartItem(${orderItemBean.itemId})" href="javascript:;">
                                         <i class="layui-icon layui-icon-delete"></i>删除
                                     </a>
                                 </td>
@@ -105,9 +142,9 @@
                         </c:forEach>
                         <tr>
                             <td colspan="6" align="right">
-                                <div>商品总个数：${cartNum}</div>
-                                <div>商品种类总数：${typeSet.size()}</div>
-                                <div>商品总价：￥${cartMoney}</div>
+                                <span style="margin-left: 50px">商品总个数：${cartItemCount}</span>
+                                <span style="margin-left: 50px">商品种类总数：${typeSet.size()}</span>
+                                <span style="margin-left: 50px">商品总价：￥${cartTotalPrice}</span>
                             </td>
                         </tr>
                         <tr>
@@ -115,10 +152,12 @@
                                 <a href="${contextPath}" class="layui-btn layui-btn-normal">
                                     <i class="layui-icon layui-icon-return"></i>继续购物
                                 </a>
-                                <a href="javascirpt:;" class="layui-btn layui-btn-danger" onclick="clearCart()">
+                                <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="clearCart()">
                                     <i class="layui-icon layui-icon-delete"></i>清空购物车
                                 </a>
-                                <a href="" class="layui-btn layui-btn-warm">结账<i class="layui-icon layui-icon-triangle-r"></i></a>
+                                <a href="${contextPath}/order" class="layui-btn layui-btn-warm" >
+                                    结算并下订单<i class="layui-icon layui-icon-triangle-r"></i>
+                                </a>
                             </td>
                         </tr>
                         </tbody>

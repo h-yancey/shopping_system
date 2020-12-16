@@ -197,8 +197,7 @@
             }));
         })
 
-        layui.use(['form'], function () {
-        });
+        layui.use(['form']);
     </script>
     <style>
         input.error {

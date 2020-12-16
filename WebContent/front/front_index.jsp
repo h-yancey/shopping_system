@@ -219,7 +219,7 @@
                                             <div style="height:40px;text-align: center">
                                                 <a href="${contextPath}?task=info&itemId=${itemBean.itemId}" class="layui-btn layui-btn-normal" style="width: 70px">详细信息</a>
                                                 <c:if test="${itemBean.shortageTag == '否'}">
-                                                    <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="addCartItem(${itemBean.itemId})" style="width: 70px">
+                                                    <a href="javascript:;" class="layui-btn layui-btn-warm" onclick="addCartItem(${itemBean.itemId})" style="width: 70px">
                                                         <i class="layui-icon layui-icon-cart-simple"></i>购买
                                                     </a>
                                                 </c:if>
