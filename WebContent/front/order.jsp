@@ -88,18 +88,15 @@
                     layer.confirm("是否已确认订单信息填写正确？", {btn: ["是，确认下单", "否，再检查看看"]}, function () {
                         var url = "${contextPath}/order?task=placeOrder";
                         var formData = $("#order_form").serializeArray();
-                        console.log(formData);
                         $.post(url, formData, function (jsonData) {
                             var flag = jsonData.flag;
                             var message = jsonData.message;
                             if (flag) {
-                                layer.msg("下单成功", {icon: 1, time: 1000}, function () {
-                                    window.location.href = "${contextPath}/member";
+                                layer.alert("您的订单已经提交成功<br>" + message, {icon: 1}, function () {
+                                    window.location.href = "${contextPath}/member?task=myOrder";
                                 });
                             } else {
-                                layer.alert("下单失败，原因：" + message, {
-                                    icon: 2
-                                });
+                                layer.alert("您的订单提交失败，原因：" + message, {icon: 2});
                             }
                         }, "json");
                     })
@@ -153,7 +150,7 @@
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label"> 价格总计 </label>
+                            <label class="layui-form-label"> 价格总计(￥) </label>
                             <div class="layui-input-inline">
                                 <input class="layui-input" name="totalPrice" value="${cartTotalPrice}" readonly>
                             </div>

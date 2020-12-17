@@ -88,7 +88,7 @@
     <div class="layui-card" style="margin-left: 200px;margin-right: 200px">
         <div class="layui-card-body">
             <div class="layui-row">
-                <table class="layui-table layui-form" width="100%">
+                <table class="layui-table layui-form" >
                     <c:if test="${empty cartItemSet}">
                         <tr>
                             <td colspan="8" align="center" style="font-size: 20px;"><i class="layui-icon-tips layui-icon"></i>
@@ -100,11 +100,11 @@
                         <thead>
                         <tr>
                                 <%--                            <th width="20"><input type="checkbox" name="" lay-skin="primary"></th>--%>
-                            <th width="25%">商品名称</th>
+                            <th width="25%" style="text-align: center">商品名称</th>
                             <th width="15%" style="text-align: center">商品缩略图</th>
-                            <th width="15%" style="text-align: right">商品单价</th>
+                            <th width="15%" style="text-align: center">商品单价</th>
                             <th width="20%" style="text-align: center">商品数量</th>
-                            <th width="15%" style="text-align: right">商品小计</th>
+                            <th width="15%" style="text-align: center">商品小计</th>
                             <th width="10%" style="text-align: center">操作</th>
                         </thead>
                         <tbody>
@@ -121,7 +121,7 @@
                                             <i class="layui-icon">-</i>
                                         </a>
                                         <input type="text" class="layui-input layui-input-inline" onblur="updateCartItemCount(${orderItemBean.itemId},this.value)"
-                                               value="${orderItemBean.itemCount}"  style="text-align: center;height: 30px;width: 40px;padding: 0px">
+                                               value="${orderItemBean.itemCount}" style="text-align: center;height: 30px;width: 40px;padding: 0px">
                                         <a href="javascript:;" class="layui-btn layui-btn-xs" style="width: 30px;height: 30px" onclick="incCartItemCount(${orderItemBean.itemId})">
                                             <i class="layui-icon">+</i>
                                         </a>
@@ -155,7 +155,7 @@
                                 <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="clearCart()">
                                     <i class="layui-icon layui-icon-delete"></i>清空购物车
                                 </a>
-                                <a href="${contextPath}/order" class="layui-btn layui-btn-warm" >
+                                <a href="${contextPath}/order" class="layui-btn layui-btn-warm">
                                     结算并下订单<i class="layui-icon layui-icon-triangle-r"></i>
                                 </a>
                             </td>

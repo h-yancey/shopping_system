@@ -37,22 +37,40 @@ public class OrderDao {
 
     private String getSearchSql(Map<String, String> paramMap) {
         StringBuffer searchSql = new StringBuffer();
-        String itemTypeId = paramMap.get("itemTypeId");
-        String keyword = paramMap.get("keyword");
-        String priceMin = paramMap.get("priceMin");
-        String priceMax = paramMap.get("priceMax");
+        String orderDate = paramMap.get("orderDate");
+        String auditStatus = paramMap.get("auditStatus");
+        String orderUser = paramMap.get("orderUser");
 
-        if (!GlobalUtil.isEmpty(keyword)) {
-            searchSql.append(" and (itemName like '%" + keyword + "%'");
-            searchSql.append(" or itemDesc like '%" + keyword + "%')");
+        if (!GlobalUtil.isEmpty(orderDate)) {
+            searchSql.append(" and orderDate like '%" + orderDate + "%'");
         }
-        if (!GlobalUtil.isEmpty(priceMin)) {
-            searchSql.append(" and itemPrice >= " + priceMin);
+        if (!GlobalUtil.isEmpty(auditStatus)) {
+            searchSql.append(" and auditStatus = '" + auditStatus + "'");
         }
-        if (!GlobalUtil.isEmpty(priceMax)) {
-            searchSql.append(" and itemPrice <= " + priceMax);
+        if (!GlobalUtil.isEmpty(orderUser)) {
+            searchSql.append(" and orderUser = '" + orderUser + "'");
         }
         return searchSql.toString();
+    }
+
+    public int getOrderCount(Map<String, String> paramMap) {
+        String searchSql = this.getSearchSql(paramMap);
+        String sql = "SELECT IFNULL(COUNT(orderId),0) AS order_count FROM t_order";
+        if (searchSql != null && searchSql.length() > 0) {
+            sql = sql + " WHERE 1=1 " + searchSql;
+        }
+
+        Long orderCount = null;
+        Connection conn = JdbcUtil.getConnection();
+        QueryRunner runner = new QueryRunner();
+        try {
+            orderCount = (Long) runner.query(conn, sql, new ScalarHandler("order_count"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+        return orderCount.intValue();
     }
 
     public List<OrderBean> getOrderList(int beginIndex, int pageSize, Map<String, String> paramMap) {
@@ -75,6 +93,38 @@ public class OrderDao {
         return orderist;
     }
 
+    public void saveOrder(OrderBean orderBean) throws SQLException {
+        int orderId = orderBean.getOrderId();
+        String orderUser = orderBean.getOrderUser();
+        Date orderDate = orderBean.getOrderDate();
+        String payType = orderBean.getPayType();
+        String sendType = orderBean.getSendType();
+        int itemTypeSize = orderBean.getItemTypeSize();
+        int itemSize = orderBean.getItemSize();
+        BigDecimal totalPrice = orderBean.getTotalPrice();
+        String auditStatus = orderBean.getAuditStatus();
+        String consignee = orderBean.getConsignee();
+        String address = orderBean.getAddress();
+        String postcode = orderBean.getPostcode();
+        String phone = orderBean.getPhone();
+        String email = orderBean.getEmail();
+
+        String sql =
+                "INSERT INTO t_order(orderId,orderUser,orderDate,payType,sendType,itemTypeSize,itemSize,totalPrice,auditStatus,consignee,address,postcode,phone,email) " + "VALUES(?,?,?,?,?,?," +
+                        "?,?,?,?,?,?,?,?)";
+        Connection conn = JdbcUtil.getConnection();
+        QueryRunner runner = new QueryRunner();
+        Object[] params = {orderId, orderUser, orderDate, payType, sendType, itemTypeSize, itemSize, totalPrice, auditStatus, consignee, address, postcode, phone, email};
+        try {
+            runner.update(conn, sql, params);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
     //    public boolean isExistItemId(int itemId) {
 //        String sql = "SELECT IFNULL(COUNT(itemId),0) AS is_exist_itemid FROM t_mc WHERE itemId = ?";
 //        Long cntItemId = null;
@@ -93,36 +143,7 @@ public class OrderDao {
 //        return false;
 //    }
 //
-    public void saveOrder(OrderBean orderBean) throws SQLException {
-        int orderId = orderBean.getOrderId();
-        String orderUser = orderBean.getOrderUser();
-        Date orderDate = orderBean.getOrderDate();
-        String payType = orderBean.getPayType();
-        String sendType = orderBean.getSendType();
-        int itemTypeSize = orderBean.getItemTypeSize();
-        int itemSize = orderBean.getItemSize();
-        BigDecimal totalPrice = orderBean.getTotalPrice();
-        String auditStatus = orderBean.getAuditStatus();
-        String consignee = orderBean.getConsignee();
-        String address = orderBean.getAddress();
-        String postcode = orderBean.getPostcode();
-        String phone = orderBean.getPhone();
-        String email = orderBean.getEmail();
 
-        String sql = "INSERT INTO t_order(orderId,orderUser,orderDate,payType,sendType,itemTypeSize,itemSize,totalPrice,auditStatus,consignee,address,postcode,phone,email) VALUES(?,?,?,?,?,?,?,?,?," +
-                "?,?,?,?)";
-        Connection conn = JdbcUtil.getConnection();
-        QueryRunner runner = new QueryRunner();
-        Object[] params = {orderId, orderUser, orderDate, payType, sendType, itemTypeSize, itemSize, totalPrice, auditStatus, consignee, address, postcode, phone, email};
-        try {
-            runner.update(conn, sql, params);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            DbUtils.closeQuietly(conn);
-        }
-    }
 //
 //    public void deleteItem(int itemId) throws SQLException {
 //        String sql = "DELETE FROM t_mc WHERE itemId = ?";
@@ -178,27 +199,6 @@ public class OrderDao {
 //            DbUtils.closeQuietly(conn);
 //        }
 //    }
-//
-//    public int getItemCount(Map<String, String> paramMap) {
-//        String searchSql = this.getSearchSql(paramMap);
-//        String sql = "SELECT IFNULL(COUNT(itemId),0) AS item_count FROM t_mc";
-//        if (searchSql != null && searchSql.length() > 0) {
-//            sql = sql + " WHERE 1=1 " + searchSql;
-//        }
-//
-//        Long itemCount = null;
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        try {
-//            itemCount = (Long) runner.query(conn, sql, new ScalarHandler("item_count"));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//        return itemCount.intValue();
-//    }
-//
-//
+
 
 }

@@ -1,9 +1,13 @@
 package com.servlet;
 
 import com.bean.OrderBean;
+import com.bean.OrderItemBean;
 import com.bean.UserBean;
+import com.google.gson.Gson;
+import com.service.OrderItemService;
 import com.service.OrderService;
 import com.util.GlobalUtil;
+import com.util.ResponseInfo;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,10 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;;import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -22,6 +25,7 @@ import java.util.Map;
 @WebServlet(urlPatterns = "/order")
 public class OrderServlet extends HttpServlet {
     private OrderService orderService = new OrderService();
+    private OrderItemService orderItemService = new OrderItemService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -60,10 +64,9 @@ public class OrderServlet extends HttpServlet {
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 
-    private void placeOrder(HttpServletRequest req, HttpServletResponse resp) {
+    private void placeOrder(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
         UserBean frontUserBean = (UserBean) session.getAttribute("frontUserBean");
-
 
         String orderId = req.getParameter("orderId");
         String itemTypeSize = req.getParameter("itemTypeSize");
@@ -93,12 +96,36 @@ public class OrderServlet extends HttpServlet {
         orderBean.setPhone(phone);
         orderBean.setEmail(email);
 
+        PrintWriter out = resp.getWriter();
+        ResponseInfo responseInfo = new ResponseInfo();
+        Gson gson = new Gson();
+
+        Set<OrderItemBean> cartItemSet = (LinkedHashSet<OrderItemBean>) session.getAttribute("cartItemSet");
         try {
             orderService.saveOrder(orderBean);
+            for (OrderItemBean orderItemBean : cartItemSet) {
+                int id = orderItemService.getMaxId();
+                orderItemBean.setId(id);
+                orderItemBean.setOrderId(orderBean.getOrderId());
+                orderItemService.saveOrderItem(orderItemBean);
+            }
+            //成功下单后清空购物车相关信息
+            session.removeAttribute("cartItemSet");
+            session.removeAttribute("cartItemCount");
+            session.removeAttribute("cartTotalPrice");
+            session.removeAttribute("typeSet");
+            responseInfo.setFlag(true);
+            responseInfo.setMessage("订单编号：" + orderBean.getOrderId() + "<br>下单时间：" + GlobalUtil.formatDateTime(orderBean.getOrderDate()));
         } catch (Exception e) {
             e.printStackTrace();
+            responseInfo.setFlag(false);
+            responseInfo.setMessage(e.getMessage());
+        } finally {
+            String json = gson.toJson(responseInfo);
+            out.print(json);
+            out.flush();
+            out.close();
         }
-
     }
 
 }

@@ -22,9 +22,7 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script>
-        layui.use(['form', 'layer'],
-            function () {
-            });
+        layui.use(['form', 'layer']);
 
         $(function () {
             var validator = $("#update_pwd_form").validate({
@@ -118,10 +116,10 @@
 <c:import url="common/header.jsp"></c:import>
 
 <div class="layui-fluid">
-    <div class="layui-card" style="margin-left: 300px;margin-right: 300px">
+    <div class="layui-card">
         <div class="layui-card-body">
             <div class="layui-row">
-                <div class="layui-col-md4">
+                <div class="layui-col-md2">
                     <div class="layui-show">
                         <dl class="member-dl">
                             <dt>会员中心</dt>
@@ -131,10 +129,13 @@
                             <dd>
                                 <a href="${contextPath}/member?task=editPwd">密码修改</a>
                             </dd>
+                            <dd>
+                                <a href="${contextPath}/member?task=myOrder">我的订单</a>
+                            </dd>
                         </dl>
                     </div>
                 </div>
-                <div class="layui-col-md8" style="padding:10px;border: 1px solid #e6e6e6">
+                <div class="layui-col-md10" style="padding:10px;border: 1px solid #e6e6e6">
                     <h2>密码修改</h2>
                     <hr>
                     <form class="layui-form" autocomplete="off" id="update_pwd_form">

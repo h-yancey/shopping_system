@@ -1,33 +1,28 @@
 package com.service;
 
 
-import com.bean.ItemBean;
 import com.bean.OrderBean;
+import com.bean.OrderItemBean;
 import com.dao.OrderDao;
-import com.util.GlobalUtil;
+import com.dao.OrderItemDao;
 
 import java.util.List;
 import java.util.Map;
 
 
-public class OrderService {
-    private OrderDao orderDao = new OrderDao();
+public class OrderItemService {
+    private OrderItemDao orderItemDao = new OrderItemDao();
 
-    public int getMaxOrderId() {
-        return orderDao.getMaxOrderId();
+//    public List<OrderBean> getOrderList(int beginIndex, int pageSize, Map<String, String> paramMap) {
+//        return orderDao.getOrderList(beginIndex, pageSize, paramMap);
+//    }
+
+    public int getMaxId() {
+        return orderItemDao.getMaxId();
     }
 
-    public int getOrderCount(Map<String, String> paramMap) {
-        return orderDao.getOrderCount(paramMap);
-    }
-
-    public List<OrderBean> getOrderList(int beginIndex, int pageSize, Map<String, String> paramMap) {
-        return orderDao.getOrderList(beginIndex, pageSize, paramMap);
-    }
-
-
-    public void saveOrder(OrderBean orderBean) throws Exception {
-        orderDao.saveOrder(orderBean);
+    public void saveOrderItem(OrderItemBean orderItemBean) throws Exception {
+        orderItemDao.saveOrderItem(orderItemBean);
     }
 //
 //    public void deleteItem(int itemId) throws Exception {
@@ -52,6 +47,9 @@ public class OrderService {
 //        itemDao.updateItem(itemId, itemBean);
 //    }
 //
+//    public int getItemCount(Map<String, String> paramMap) {
+//        return itemDao.getItemCount(paramMap);
+//    }
 
 
 }

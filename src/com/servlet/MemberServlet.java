@@ -1,9 +1,13 @@
 package com.servlet;
 
+import com.bean.ItemBean;
+import com.bean.OrderBean;
 import com.bean.UserBean;
 import com.google.gson.Gson;
+import com.service.OrderService;
 import com.service.UserService;
 import com.util.GlobalUtil;
+import com.util.PageUtil;
 import com.util.ResponseInfo;
 
 import javax.servlet.ServletException;
@@ -14,6 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -21,6 +28,7 @@ import java.io.PrintWriter;
 @WebServlet(urlPatterns = "/member")
 public class MemberServlet extends HttpServlet {
     private UserService userService = new UserService();
+    private OrderService orderService = new OrderService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,8 +46,11 @@ public class MemberServlet extends HttpServlet {
             editPwd(req, resp);
         } else if ("updatePwd".equals(task)) {
             updatePwd(req, resp);
+        } else if ("myOrder".equals(task)) {
+            myOrder(req, resp);
         }
     }
+
 
     /**
      * 重新设置登录的用户
@@ -152,4 +163,41 @@ public class MemberServlet extends HttpServlet {
             out.close();
         }
     }
+
+    private void myOrder(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        UserBean frontUserBean = (UserBean) session.getAttribute("frontUserBean");
+
+        //查询参数
+        String orderDate = req.getParameter("orderDate");
+        String auditStatus = req.getParameter("auditStatus");
+        String orderUser = frontUserBean.getUsername();
+
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("orderDate", orderDate);
+        paramMap.put("auditStatus", auditStatus);
+        paramMap.put("orderUser", orderUser);
+        req.setAttribute("paramMap", paramMap);
+
+        //分页
+        PageUtil pageUtil = new PageUtil(req);
+        pageUtil.setPageSize(5);
+        pageUtil.setRsCount(orderService.getOrderCount(paramMap));
+
+        int pageSize = pageUtil.getPageSize();
+        int currentPage = pageUtil.getCurrentPage();
+        int rsCount = pageUtil.getRsCount();
+        int pageCount = pageUtil.getPageCount();
+
+        String pageTool = pageUtil.createPageTool(PageUtil.BbsText);
+        req.setAttribute("pageTool", pageTool);
+
+        int beginIndex = (currentPage - 1) * pageSize;
+        List<OrderBean> orderList = orderService.getOrderList(beginIndex, pageSize, paramMap);
+        req.setAttribute("orderList", orderList);
+
+        String forwardUrl = "/front/my_order.jsp";
+        req.getRequestDispatcher(forwardUrl).forward(req, resp);
+    }
+
 }

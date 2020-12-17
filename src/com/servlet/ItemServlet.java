@@ -156,7 +156,7 @@ public class ItemServlet extends HttpServlet {
 
             //System.out.println(dataMap);
             ItemBean itemBean = new ItemBean();
-            dataMap.put("addDate", GlobalUtil.formatDateTime((String) dataMap.get("addDate")));
+            dataMap.put("addDate", GlobalUtil.parseDateTime((String) dataMap.get("addDate")));
             BeanUtils.populate(itemBean, dataMap);
 
             int smallTypeId = itemBean.getSmallTypeId();
@@ -300,7 +300,7 @@ public class ItemServlet extends HttpServlet {
 
 
             ItemBean itemBean = new ItemBean();
-            dataMap.put("addDate", GlobalUtil.formatDateTime((String) dataMap.get("addDate")));
+            dataMap.put("addDate", GlobalUtil.parseDateTime((String) dataMap.get("addDate")));
             BeanUtils.populate(itemBean, dataMap);
 
             int smallTypeId = itemBean.getSmallTypeId();

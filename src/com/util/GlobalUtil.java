@@ -20,7 +20,7 @@ public class GlobalUtil {
         return simpleDateFormat.format(date);
     }
 
-    public static Date formatDateTime(String str) {
+    public static Date parseDateTime(String str) {
         if (isEmpty(str)) {
             return null;
         }
@@ -31,6 +31,11 @@ public class GlobalUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static String formatDateTime(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return simpleDateFormat.format(date);
     }
 
     public static Date formatDate(String str) {
