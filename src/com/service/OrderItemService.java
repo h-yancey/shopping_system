@@ -29,6 +29,9 @@ public class OrderItemService {
         return orderItemDao.getOrderItemList(beginIndex, pageSize, paramMap);
     }
 
+    public List<OrderItemBean> getOrderItemListByOrderId(int orderId) {
+        return orderItemDao.getOrderItemListByOrderId(orderId);
+    }
 
     public void saveOrderItem(OrderItemBean orderItemBean) throws Exception {
         orderItemDao.saveOrderItem(orderItemBean);

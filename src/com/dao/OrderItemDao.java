@@ -69,6 +69,21 @@ public class OrderItemDao {
         return orderItemList;
     }
 
+    public List<OrderItemBean> getOrderItemListByOrderId(int orderId) {
+        String sql = "SELECT * FROM t_order_item WHERE orderId = ?";
+        List<OrderItemBean> orderItemList = null;
+        Connection conn = JdbcUtil.getConnection();
+        QueryRunner runner = new QueryRunner();
+        try {
+            orderItemList = runner.query(conn, sql, new BeanListHandler<>(OrderItemBean.class), orderId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+        return orderItemList;
+    }
+
     public int getMaxId() {
         String sql = "SELECT IFNULL(MAX(id),0)+1 AS max_id FROM t_order_item";
         Long maxId = null;

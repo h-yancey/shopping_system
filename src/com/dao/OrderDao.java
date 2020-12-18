@@ -41,6 +41,9 @@ public class OrderDao {
         String orderDate = paramMap.get("orderDate");
         String auditStatus = paramMap.get("auditStatus");
         String orderUser = paramMap.get("orderUser");
+        String startDate = paramMap.get("startDate");
+        String endDate = paramMap.get("endDate");
+        String itemName = paramMap.get("itemName");
 
         if (!GlobalUtil.isEmpty(orderDate)) {
             searchSql.append(" and orderDate like '%" + orderDate + "%'");
@@ -50,6 +53,15 @@ public class OrderDao {
         }
         if (!GlobalUtil.isEmpty(orderUser)) {
             searchSql.append(" and orderUser = '" + orderUser + "'");
+        }
+        if (!GlobalUtil.isEmpty(startDate)) {
+            searchSql.append(" and orderDate >= '" + startDate + "'");
+        }
+        if (!GlobalUtil.isEmpty(endDate)) {
+            searchSql.append(" and orderDate <= '" + endDate + " 23:59:59'");
+        }
+        if (!GlobalUtil.isEmpty(itemName)) {
+            searchSql.append(" and orderId in (select orderId from t_order_item where itemName like '%" + itemName + "%')");
         }
         return searchSql.toString();
     }

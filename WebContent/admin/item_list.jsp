@@ -23,9 +23,7 @@
     <![endif]-->
 
     <script>
-        layui.use(['form'], function () {
-            form = layui.form;
-        });
+        layui.use(['form']);
 
         function deleteItem(itemId, imgName) {
             layer.confirm("是否删除该商品？", {

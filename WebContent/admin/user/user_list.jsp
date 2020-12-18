@@ -127,7 +127,7 @@
                             <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
                         </a>
                     </form>
-
+                    <hr>
                 </div>
                 <%--                <div class="layui-card-header">--%>
                 <%--                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>--%>

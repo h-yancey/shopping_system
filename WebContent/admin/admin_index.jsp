@@ -41,10 +41,6 @@
 
             $(".close-all").click(function () {
                 if ($(this).attr("data-type") == "closeall") {
-                    // $("#nav li").removeClass("open");
-                    // $("#nav a").removeClass("active");
-                    // $("ul.sub-menu").css("display", "none");
-
                     var tabtitle = $(".layui-tab-title li");
                     var ids = new Array();
                     $.each(tabtitle, function (i) {
@@ -76,34 +72,34 @@
     <div class="left_open">
         <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
     </div>
-<%--    <ul class="layui-nav left fast-add">--%>
-<%--        <li class="layui-nav-item">--%>
-<%--            <a href="javascript:;">+新增</a>--%>
-<%--            <dl class="layui-nav-child">--%>
-<%--                <!-- 二级菜单 -->--%>
-<%--                <dd>--%>
-<%--                    <a onclick="xadmin.open('最大化','http://www.baidu.com','','',true)">--%>
-<%--                        <i class="iconfont">&#xe6a2;</i>弹出最大化</a>--%>
-<%--                </dd>--%>
-<%--                <dd>--%>
-<%--                    <a onclick="xadmin.open('弹出自动宽高','http://www.baidu.com')">--%>
-<%--                        <i class="iconfont">&#xe6a8;</i>弹出自动宽高</a>--%>
-<%--                </dd>--%>
-<%--                <dd>--%>
-<%--                    <a onclick="xadmin.open('弹出指定宽高','http://www.baidu.com',500,300)">--%>
-<%--                        <i class="iconfont">&#xe6a8;</i>弹出指定宽高</a>--%>
-<%--                </dd>--%>
-<%--                <dd>--%>
-<%--                    <a onclick="xadmin.add_tab('在tab打开','member-list.html')">--%>
-<%--                        <i class="iconfont">&#xe6b8;</i>在tab打开</a>--%>
-<%--                </dd>--%>
-<%--                <dd>--%>
-<%--                    <a onclick="xadmin.add_tab('在tab打开刷新','member-del.html',true)">--%>
-<%--                        <i class="iconfont">&#xe6b8;</i>在tab打开刷新</a>--%>
-<%--                </dd>--%>
-<%--            </dl>--%>
-<%--        </li>--%>
-<%--    </ul>--%>
+    <%--    <ul class="layui-nav left fast-add">--%>
+    <%--        <li class="layui-nav-item">--%>
+    <%--            <a href="javascript:;">+新增</a>--%>
+    <%--            <dl class="layui-nav-child">--%>
+    <%--                <!-- 二级菜单 -->--%>
+    <%--                <dd>--%>
+    <%--                    <a onclick="xadmin.open('最大化','http://www.baidu.com','','',true)">--%>
+    <%--                        <i class="iconfont">&#xe6a2;</i>弹出最大化</a>--%>
+    <%--                </dd>--%>
+    <%--                <dd>--%>
+    <%--                    <a onclick="xadmin.open('弹出自动宽高','http://www.baidu.com')">--%>
+    <%--                        <i class="iconfont">&#xe6a8;</i>弹出自动宽高</a>--%>
+    <%--                </dd>--%>
+    <%--                <dd>--%>
+    <%--                    <a onclick="xadmin.open('弹出指定宽高','http://www.baidu.com',500,300)">--%>
+    <%--                        <i class="iconfont">&#xe6a8;</i>弹出指定宽高</a>--%>
+    <%--                </dd>--%>
+    <%--                <dd>--%>
+    <%--                    <a onclick="xadmin.add_tab('在tab打开','member-list.html')">--%>
+    <%--                        <i class="iconfont">&#xe6b8;</i>在tab打开</a>--%>
+    <%--                </dd>--%>
+    <%--                <dd>--%>
+    <%--                    <a onclick="xadmin.add_tab('在tab打开刷新','member-del.html',true)">--%>
+    <%--                        <i class="iconfont">&#xe6b8;</i>在tab打开刷新</a>--%>
+    <%--                </dd>--%>
+    <%--            </dl>--%>
+    <%--        </li>--%>
+    <%--    </ul>--%>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
             <a href="javascript:;">${userBean.username}</a>
@@ -170,14 +166,10 @@
                     <i class="iconfont nav_right">&#xe697;</i></a>
                 <ul class="sub-menu">
                     <li>
-                        <a onclick="xadmin.add_tab('订单列表','order-list.html')">
+                        <a onclick="xadmin.add_tab('订单管理','${contextPath}/servlet/OrderServlet?task=list')">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>订单列表</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('订单列表1','order-list1.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>订单列表1</cite></a>
+                            <cite>订单管理</cite>
+                        </a>
                     </li>
                 </ul>
             </li>

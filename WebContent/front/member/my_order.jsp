@@ -42,8 +42,8 @@
         }
 
         function orderInfo(orderId) {
-            var url = "${contextPath}/member?task=orderInfo&orderId="+orderId;
-            xadmin.open('查看订单',url);
+            var url = "${contextPath}/member?task=orderInfo&orderId=" + orderId;
+            xadmin.open('查看订单', url);
             // var data={
             //     orderId:orderId
             // };
@@ -137,6 +137,7 @@
                                     <th style="text-align: center">订单金额</th>
                                     <th style="text-align: center">商品总数</th>
                                     <th style="text-align: center">操作</th>
+                                </tr>
                                 </thead>
                                 <tbody>
                                 <c:if test="${empty orderList}">

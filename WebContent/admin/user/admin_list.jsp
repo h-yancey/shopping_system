@@ -90,6 +90,7 @@
                             </a>
                         </div>
                     </form>
+                    <hr>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
                     <table class="layui-table layui-form">
