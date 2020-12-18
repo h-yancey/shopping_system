@@ -21,62 +21,54 @@ import java.util.Map;
 public class OrderItemDao {
     private String getSearchSql(Map<String, String> paramMap) {
         StringBuffer searchSql = new StringBuffer();
-        String itemTypeId = paramMap.get("itemTypeId");
-        String keyword = paramMap.get("keyword");
-        String priceMin = paramMap.get("priceMin");
-        String priceMax = paramMap.get("priceMax");
+        String orderId = paramMap.get("orderId");
 
-        if (!GlobalUtil.isEmpty(keyword)) {
-            searchSql.append(" and (itemName like '%" + keyword + "%'");
-            searchSql.append(" or itemDesc like '%" + keyword + "%')");
-        }
-        if (!GlobalUtil.isEmpty(priceMin)) {
-            searchSql.append(" and itemPrice >= " + priceMin);
-        }
-        if (!GlobalUtil.isEmpty(priceMax)) {
-            searchSql.append(" and itemPrice <= " + priceMax);
+        if (!GlobalUtil.isEmpty(orderId)) {
+            searchSql.append(" and orderId = '" + orderId + "'");
         }
         return searchSql.toString();
     }
 
-//    public List<OrderBean> getOrderList(int beginIndex, int pageSize, Map<String, String> paramMap) {
-//        String searchSql = this.getSearchSql(paramMap);
-//        String sql = "SELECT * FROM t_order";
-//        if (searchSql != null && searchSql.length() > 0) {
-//            sql = sql + " WHERE 1=1 " + searchSql;
-//        }
-//        sql += " ORDER BY orderDate ASC LIMIT " + beginIndex + "," + pageSize;
-//        List<OrderBean> orderist = null;
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        try {
-//            orderist = runner.query(conn, sql, new BeanListHandler<>(OrderBean.class));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//        return orderist;
-//    }
+    public int getOrderItemCount(Map<String, String> paramMap) {
+        String searchSql = this.getSearchSql(paramMap);
+        String sql = "SELECT IFNULL(COUNT(id),0) AS order_item_count FROM t_order_item";
+        if (searchSql != null && searchSql.length() > 0) {
+            sql = sql + " WHERE 1=1 " + searchSql;
+        }
 
-    //    public boolean isExistItemId(int itemId) {
-//        String sql = "SELECT IFNULL(COUNT(itemId),0) AS is_exist_itemid FROM t_mc WHERE itemId = ?";
-//        Long cntItemId = null;
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        try {
-//            cntItemId = (Long) runner.query(conn, sql, new ScalarHandler("is_exist_itemid"), itemId);
-//            if (cntItemId > 0) {
-//                return true;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//        return false;
-//    }
-//
+        Long orderItemCount = null;
+        Connection conn = JdbcUtil.getConnection();
+        QueryRunner runner = new QueryRunner();
+        try {
+            orderItemCount = (Long) runner.query(conn, sql, new ScalarHandler("order_item_count"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+        return orderItemCount.intValue();
+    }
+
+    public List<OrderItemBean> getOrderItemList(int beginIndex, int pageSize, Map<String, String> paramMap) {
+        String searchSql = this.getSearchSql(paramMap);
+        String sql = "SELECT * FROM t_order_item";
+        if (searchSql != null && searchSql.length() > 0) {
+            sql = sql + " WHERE 1=1 " + searchSql;
+        }
+        sql += " ORDER BY id ASC LIMIT " + beginIndex + "," + pageSize;
+        List<OrderItemBean> orderItemList = null;
+        Connection conn = JdbcUtil.getConnection();
+        QueryRunner runner = new QueryRunner();
+        try {
+            orderItemList = runner.query(conn, sql, new BeanListHandler<>(OrderItemBean.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+        return orderItemList;
+    }
+
     public int getMaxId() {
         String sql = "SELECT IFNULL(MAX(id),0)+1 AS max_id FROM t_order_item";
         Long maxId = null;
@@ -172,27 +164,6 @@ public class OrderItemDao {
 //            DbUtils.closeQuietly(conn);
 //        }
 //    }
-//
-//    public int getItemCount(Map<String, String> paramMap) {
-//        String searchSql = this.getSearchSql(paramMap);
-//        String sql = "SELECT IFNULL(COUNT(itemId),0) AS item_count FROM t_mc";
-//        if (searchSql != null && searchSql.length() > 0) {
-//            sql = sql + " WHERE 1=1 " + searchSql;
-//        }
-//
-//        Long itemCount = null;
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        try {
-//            itemCount = (Long) runner.query(conn, sql, new ScalarHandler("item_count"));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//        return itemCount.intValue();
-//    }
-//
-//
+
 
 }

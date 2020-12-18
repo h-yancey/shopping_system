@@ -113,7 +113,7 @@
     </style>
 </head>
 <body>
-<c:import url="common/header.jsp"></c:import>
+<c:import url="../common/header.jsp"></c:import>
 
 <div class="layui-fluid">
     <div class="layui-card">

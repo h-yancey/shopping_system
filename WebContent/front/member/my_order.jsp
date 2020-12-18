@@ -41,6 +41,17 @@
             window.location.href = "${contextPath}/member?task=myOrder";
         }
 
+        function orderInfo(orderId) {
+            var url = "${contextPath}/member?task=orderInfo&orderId="+orderId;
+            xadmin.open('查看订单',url);
+            // var data={
+            //     orderId:orderId
+            // };
+            // $.post(url,data,function(){
+            //
+            // })
+        }
+
     </script>
     <style>
         dl.member-dl {
@@ -66,7 +77,7 @@
     </style>
 </head>
 <body>
-<c:import url="common/header.jsp"></c:import>
+<c:import url="../common/header.jsp"></c:import>
 
 <div class="layui-fluid">
     <div class="layui-card">
@@ -116,7 +127,7 @@
                             <hr>
                         </div>
                         <div class="layui-card-body">
-                            <table class="layui-table layui-form">
+                            <table class="layui-table">
                                 <thead>
                                 <tr>
                                     <%--                            <th width="20"><input type="checkbox" name="" lay-skin="primary"></th>--%>
@@ -148,7 +159,7 @@
                                         <td align="right">￥${orderBean.totalPrice}</td>
                                         <td align="center">${orderBean.itemSize}</td>
                                         <td class="td-manage" align="center">
-                                            <button class="layui-btn layui-btn-normal layui-btn-xs" onclick="">
+                                            <button class="layui-btn layui-btn-normal layui-btn-xs" onclick="orderInfo(${orderBean.orderId})">
                                                 <i class="layui-icon layui-icon-list"></i>查看订单
                                             </button>
                                                 <%--                                            <button class="layui-btn-danger layui-btn layui-btn-xs"--%>

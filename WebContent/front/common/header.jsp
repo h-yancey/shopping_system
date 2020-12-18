@@ -62,7 +62,7 @@
                 </dl>
             </li>
             <li class="layui-nav-item">
-                <a href="${contextPath}/servlet/FrontLoginServlet?task=logout">退出</a>
+                <a href="${contextPath}/servlet/FrontLoginServlet?task=logout">退出 </a>
             </li>
         </c:if>
     </ul>

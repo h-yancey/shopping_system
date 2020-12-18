@@ -55,7 +55,14 @@
     </filter>
     <filter-mapping>
         <filter-name>FrontUserFilter</filter-name>
-        <url-pattern>/member</url-pattern>
+        <url-pattern>/front/member/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>FrontUserFilter</filter-name>
+        <url-pattern>/front/order/*</url-pattern>
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>

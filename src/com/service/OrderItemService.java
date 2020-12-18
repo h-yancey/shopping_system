@@ -21,6 +21,15 @@ public class OrderItemService {
         return orderItemDao.getMaxId();
     }
 
+    public int getOrderItemCount(Map<String, String> paramMap) {
+        return orderItemDao.getOrderItemCount(paramMap);
+    }
+
+    public List<OrderItemBean> getOrderItemList(int beginIndex, int pageSize, Map<String, String> paramMap) {
+        return orderItemDao.getOrderItemList(beginIndex, pageSize, paramMap);
+    }
+
+
     public void saveOrderItem(OrderItemBean orderItemBean) throws Exception {
         orderItemDao.saveOrderItem(orderItemBean);
     }

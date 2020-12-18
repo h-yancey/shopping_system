@@ -1,10 +1,8 @@
 package com.service;
 
 
-import com.bean.ItemBean;
 import com.bean.OrderBean;
 import com.dao.OrderDao;
-import com.util.GlobalUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -29,6 +27,15 @@ public class OrderService {
     public void saveOrder(OrderBean orderBean) throws Exception {
         orderDao.saveOrder(orderBean);
     }
+
+    public OrderBean getOrder(int orderId) throws Exception {
+        OrderBean orderBean = orderDao.getOrder(orderId);
+
+        if (orderBean == null) {
+            throw new Exception("订单不存在");
+        }
+        return orderBean;
+    }
 //
 //    public void deleteItem(int itemId) throws Exception {
 //        boolean isExist = itemDao.isExistItemId(itemId);
@@ -39,14 +46,7 @@ public class OrderService {
 //        }
 //    }
 //
-//    public ItemBean getItem(int itemId) throws Exception {
-//        ItemBean itemBean = itemDao.getItem(itemId);
-//
-//        if (itemBean == null) {
-//            throw new Exception("您要修改的商品不存在");
-//        }
-//        return itemBean;
-//    }
+
 //
 //    public void updateItem(int itemId, ItemBean itemBean) throws SQLException {
 //        itemDao.updateItem(itemId, itemBean);

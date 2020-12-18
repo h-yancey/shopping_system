@@ -8,6 +8,7 @@ import com.util.GlobalUtil;
 import com.util.JdbcUtil;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
@@ -80,17 +81,17 @@ public class OrderDao {
             sql = sql + " WHERE 1=1 " + searchSql;
         }
         sql += " ORDER BY orderDate ASC LIMIT " + beginIndex + "," + pageSize;
-        List<OrderBean> orderist = null;
+        List<OrderBean> orderList = null;
         Connection conn = JdbcUtil.getConnection();
         QueryRunner runner = new QueryRunner();
         try {
-            orderist = runner.query(conn, sql, new BeanListHandler<>(OrderBean.class));
+            orderList = runner.query(conn, sql, new BeanListHandler<>(OrderBean.class));
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DbUtils.closeQuietly(conn);
         }
-        return orderist;
+        return orderList;
     }
 
     public void saveOrder(OrderBean orderBean) throws SQLException {
@@ -123,6 +124,22 @@ public class OrderDao {
         } finally {
             DbUtils.closeQuietly(conn);
         }
+    }
+
+    public OrderBean getOrder(int orderId) throws SQLException {
+        String sql = "SELECT * FROM t_order WHERE orderId = ?";
+        OrderBean orderBean = null;
+        Connection conn = JdbcUtil.getConnection();
+        QueryRunner runner = new QueryRunner();
+        try {
+            orderBean = runner.query(conn, sql, new BeanHandler<>(OrderBean.class), orderId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+        return orderBean;
     }
 
     //    public boolean isExistItemId(int itemId) {
@@ -159,21 +176,7 @@ public class OrderDao {
 //        }
 //    }
 //
-//    public ItemBean getItem(int itemId) throws SQLException {
-//        String sql = "SELECT * FROM t_mc WHERE itemId = ?";
-//        ItemBean itemBean = null;
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        try {
-//            itemBean = runner.query(conn, sql, new BeanHandler<>(ItemBean.class), itemId);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw e;
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//        return itemBean;
-//    }
+
 //
 //    public void updateItem(int itemId, ItemBean itemBean) throws SQLException {
 //        String sql = "UPDATE t_mc SET itemId = ?, itemName = ?, itemDesc = ?, itemPrice = ?, imgName = ?, shortageTag = ?, addDate = ?, bigTypeId " + "=" + " ?, smallTypeId = " + "? WHERE itemId

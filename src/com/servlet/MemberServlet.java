@@ -2,8 +2,10 @@ package com.servlet;
 
 import com.bean.ItemBean;
 import com.bean.OrderBean;
+import com.bean.OrderItemBean;
 import com.bean.UserBean;
 import com.google.gson.Gson;
+import com.service.OrderItemService;
 import com.service.OrderService;
 import com.service.UserService;
 import com.util.GlobalUtil;
@@ -29,6 +31,7 @@ import java.util.Map;
 public class MemberServlet extends HttpServlet {
     private UserService userService = new UserService();
     private OrderService orderService = new OrderService();
+    private OrderItemService orderItemService = new OrderItemService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -48,6 +51,8 @@ public class MemberServlet extends HttpServlet {
             updatePwd(req, resp);
         } else if ("myOrder".equals(task)) {
             myOrder(req, resp);
+        } else if ("orderInfo".equals(task)) {
+            orderInfo(req, resp);
         }
     }
 
@@ -65,7 +70,7 @@ public class MemberServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         try {
-            String forwardUrl = "/front/profile_edit.jsp";
+            String forwardUrl = "/front/member/profile_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,7 +129,7 @@ public class MemberServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         try {
-            String forwardUrl = "/front/pwd_edit.jsp";
+            String forwardUrl = "/front/member/pwd_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,7 +201,48 @@ public class MemberServlet extends HttpServlet {
         List<OrderBean> orderList = orderService.getOrderList(beginIndex, pageSize, paramMap);
         req.setAttribute("orderList", orderList);
 
-        String forwardUrl = "/front/my_order.jsp";
+        String forwardUrl = "/front/member/my_order.jsp";
+        req.getRequestDispatcher(forwardUrl).forward(req, resp);
+    }
+
+    private void orderInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //HttpSession session = req.getSession();
+        //UserBean frontUserBean = (UserBean) session.getAttribute("frontUserBean");
+
+        //查询参数
+        String orderId = req.getParameter("orderId");
+        // String orderUser = frontUserBean.getUsername();
+
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("orderId", orderId);
+        // paramMap.put("orderUser", orderUser);
+        req.setAttribute("paramMap", paramMap);
+
+        try {
+            OrderBean orderBean = orderService.getOrder(Integer.parseInt(orderId));
+            req.setAttribute("orderBean", orderBean);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //分页
+        PageUtil pageUtil = new PageUtil(req);
+        pageUtil.setPageSize(5);
+        pageUtil.setRsCount(orderItemService.getOrderItemCount(paramMap));
+
+        int pageSize = pageUtil.getPageSize();
+        int currentPage = pageUtil.getCurrentPage();
+        int rsCount = pageUtil.getRsCount();
+        int pageCount = pageUtil.getPageCount();
+
+        String pageTool = pageUtil.createPageTool(PageUtil.BbsText);
+        req.setAttribute("pageTool", pageTool);
+
+        int beginIndex = (currentPage - 1) * pageSize;
+        List<OrderItemBean> orderItemList = orderItemService.getOrderItemList(beginIndex, pageSize, paramMap);
+        req.setAttribute("orderItemList", orderItemList);
+
+        String forwardUrl = "/front/member/order_info.jsp";
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 

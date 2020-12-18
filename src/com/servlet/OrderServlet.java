@@ -46,7 +46,7 @@ public class OrderServlet extends HttpServlet {
 
 
     private void toCheckout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String forwardUrl = "front/checkout.jsp";
+        String forwardUrl = "/front/order/checkout.jsp";
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 
@@ -60,7 +60,7 @@ public class OrderServlet extends HttpServlet {
         paramMap.put("sendType", sendType);
         HttpSession session = req.getSession();
         session.setAttribute("paramMap", paramMap);
-        String forwardUrl = "front/order.jsp";
+        String forwardUrl = "/front/order/order.jsp";
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 

@@ -23,7 +23,7 @@
     </script>
 </head>
 <body>
-<c:import url="common/header.jsp"></c:import>
+<c:import url="../common/header.jsp"></c:import>
 <div class="layui-fluid">
     <div class="layui-card" style="margin-left: 350px;margin-right: 350px">
         <div class="layui-card-body">
