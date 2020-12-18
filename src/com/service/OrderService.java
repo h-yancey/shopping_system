@@ -4,6 +4,7 @@ package com.service;
 import com.bean.OrderBean;
 import com.dao.OrderDao;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +37,11 @@ public class OrderService {
         }
         return orderBean;
     }
-//
+
+    public void updateOrderAudit(OrderBean orderBean) throws SQLException {
+        orderDao.updateOrderAudit(orderBean);
+    }
+
 //    public void deleteItem(int itemId) throws Exception {
 //        boolean isExist = itemDao.isExistItemId(itemId);
 //        if (isExist) {
@@ -44,12 +49,6 @@ public class OrderService {
 //        } else {
 //            throw new Exception("您要删除的商品不存在");
 //        }
-//    }
-//
-
-//
-//    public void updateItem(int itemId, ItemBean itemBean) throws SQLException {
-//        itemDao.updateItem(itemId, itemBean);
 //    }
 //
 

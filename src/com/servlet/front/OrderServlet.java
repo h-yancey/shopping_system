@@ -1,4 +1,4 @@
-package com.servlet;
+package com.servlet.front;
 
 import com.bean.OrderBean;
 import com.bean.OrderItemBean;

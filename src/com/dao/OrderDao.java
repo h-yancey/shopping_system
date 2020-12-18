@@ -177,31 +177,25 @@ public class OrderDao {
 //    }
 //
 
-//
-//    public void updateItem(int itemId, ItemBean itemBean) throws SQLException {
-//        String sql = "UPDATE t_mc SET itemId = ?, itemName = ?, itemDesc = ?, itemPrice = ?, imgName = ?, shortageTag = ?, addDate = ?, bigTypeId " + "=" + " ?, smallTypeId = " + "? WHERE itemId
-//        = ?";
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        int itemIdNew = itemBean.getItemId();
-//        String itemName = itemBean.getItemName();
-//        String itemDesc = itemBean.getItemDesc();
-//        BigDecimal itemPrice = itemBean.getItemPrice();
-//        String imgName = itemBean.getImgName();
-//        String shortageTag = itemBean.getShortageTag();
-//        Date addDate = itemBean.getAddDate();
-//        int bigTypeId = itemBean.getBigTypeId();
-//        int smallTypeId = itemBean.getSmallTypeId();
-//        Object[] params = {itemId, itemName, itemDesc, itemPrice, imgName, shortageTag, addDate, bigTypeId, smallTypeId, itemIdNew};
-//        try {
-//            runner.update(conn, sql, params);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw e;
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//    }
+    public void updateOrderAudit(OrderBean orderBean) throws SQLException {
+        String sql = "UPDATE t_order SET auditStatus = ?, msg = ?, auditUser = ?, auditDate = ? WHERE orderId = ?";
+        Connection conn = JdbcUtil.getConnection();
+        QueryRunner runner = new QueryRunner();
+        String auditStatus = orderBean.getAuditStatus();
+        String msg = orderBean.getMsg();
+        String auditUser = orderBean.getAuditUser();
+        Date auditDate = orderBean.getAuditDate();
+        int orderId = orderBean.getOrderId();
+        Object[] params = {auditStatus, msg, auditUser, auditDate, orderId};
+        try {
+            runner.update(conn, sql, params);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
 
 
 }

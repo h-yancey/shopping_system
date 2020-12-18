@@ -1,4 +1,4 @@
-package com.servlet;
+package com.servlet.front;
 
 import com.bean.UserBean;
 import com.google.gson.Gson;
@@ -17,8 +17,8 @@ import java.io.PrintWriter;
 /**
  *
  */
-@WebServlet(urlPatterns = "/servlet/LoginServlet")
-public class LoginServlet extends HttpServlet {
+@WebServlet(urlPatterns = "/servlet/FrontLoginServlet")
+public class FrontLoginServlet extends HttpServlet {
     private UserService userService = new UserService();
 
     @Override
@@ -44,11 +44,18 @@ public class LoginServlet extends HttpServlet {
         ResponseInfo responseInfo = new ResponseInfo();
         Gson gson = new Gson();
         try {
-            UserBean userBean = userService.getLoginAdmin(username, pwd);
-            HttpSession session = req.getSession();
-            session.setAttribute("userBean", userBean);
-            userService.updateLoginParams(userBean);
-            responseInfo.setFlag(true);
+            UserBean userBean = userService.getLoginUser(username, pwd);
+            String lockTag = userBean.getLockTag();
+            if("1".equals(lockTag)){
+                //被冻结，禁止登录
+                responseInfo.setFlag(false);
+                responseInfo.setMessage("用户被冻结");
+            }else if("0".equals(lockTag)) {
+                HttpSession session = req.getSession();
+                session.setAttribute("frontUserBean", userBean);
+                userService.updateLoginParams(userBean);
+                responseInfo.setFlag(true);
+            }
         } catch (Exception e) {
             responseInfo.setFlag(false);
             responseInfo.setMessage(e.getMessage());
@@ -62,6 +69,8 @@ public class LoginServlet extends HttpServlet {
 
     private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        session.removeAttribute("userBean");
+        session.removeAttribute("frontUserBean");
+        String redirectUrl = req.getContextPath();
+        resp.sendRedirect(redirectUrl);
     }
 }

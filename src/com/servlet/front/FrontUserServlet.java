@@ -1,4 +1,4 @@
-package com.servlet;
+package com.servlet.front;
 
 
 import com.bean.UserBean;

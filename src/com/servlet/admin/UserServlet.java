@@ -1,4 +1,4 @@
-package com.servlet;
+package com.servlet.admin;
 
 
 import com.bean.UserBean;
