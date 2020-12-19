@@ -159,9 +159,7 @@
                                     location.reload();
                                 });
                             } else {
-                                layer.alert("修改失败，原因：" + message, {
-                                    icon: 2
-                                });
+                                layer.alert("修改失败，原因：" + message, {icon: 2});
                             }
                         }, "json");
                     });

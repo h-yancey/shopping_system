@@ -122,9 +122,8 @@ public class OrderDao {
         String phone = orderBean.getPhone();
         String email = orderBean.getEmail();
 
-        String sql =
-                "INSERT INTO t_order(orderId,orderUser,orderDate,payType,sendType,itemTypeSize,itemSize,totalPrice,auditStatus,consignee,address,postcode,phone,email) " + "VALUES(?,?,?,?,?,?," +
-                        "?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO t_order(orderId,orderUser,orderDate,payType,sendType,itemTypeSize,itemSize,totalPrice,auditStatus,consignee,address,postcode,phone,email) VALUES(?,?,?,?,?,?,?,?,?,"
+                + "?,?,?,?,?)";
         Connection conn = JdbcUtil.getConnection();
         QueryRunner runner = new QueryRunner();
         Object[] params = {orderId, orderUser, orderDate, payType, sendType, itemTypeSize, itemSize, totalPrice, auditStatus, consignee, address, postcode, phone, email};
@@ -154,41 +153,6 @@ public class OrderDao {
         return orderBean;
     }
 
-    //    public boolean isExistItemId(int itemId) {
-//        String sql = "SELECT IFNULL(COUNT(itemId),0) AS is_exist_itemid FROM t_mc WHERE itemId = ?";
-//        Long cntItemId = null;
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        try {
-//            cntItemId = (Long) runner.query(conn, sql, new ScalarHandler("is_exist_itemid"), itemId);
-//            if (cntItemId > 0) {
-//                return true;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//        return false;
-//    }
-//
-
-//
-//    public void deleteItem(int itemId) throws SQLException {
-//        String sql = "DELETE FROM t_mc WHERE itemId = ?";
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        try {
-//            runner.update(conn, sql, itemId);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw e;
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//    }
-//
-
     public void updateOrderAudit(OrderBean orderBean) throws SQLException {
         String sql = "UPDATE t_order SET auditStatus = ?, msg = ?, auditUser = ?, auditDate = ? WHERE orderId = ?";
         Connection conn = JdbcUtil.getConnection();
@@ -209,5 +173,26 @@ public class OrderDao {
         }
     }
 
-
+    public void updateOrder(OrderBean orderBean) throws SQLException {
+        String sql = "UPDATE t_order SET payType = ?, sendType = ?, consignee = ?, address = ?, postcode = ?, phone = ?, email = ? WHERE orderId = ?";
+        Connection conn = JdbcUtil.getConnection();
+        QueryRunner runner = new QueryRunner();
+        String payType = orderBean.getPayType();
+        String sendType = orderBean.getSendType();
+        String consignee = orderBean.getConsignee();
+        String address = orderBean.getAddress();
+        String postcode = orderBean.getPostcode();
+        String phone = orderBean.getPhone();
+        String email = orderBean.getEmail();
+        int orderId = orderBean.getOrderId();
+        Object[] params = {payType, sendType, consignee, address, postcode, phone, email, orderId};
+        try {
+            runner.update(conn, sql, params);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
 }

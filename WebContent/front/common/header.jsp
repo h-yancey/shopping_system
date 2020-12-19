@@ -62,9 +62,12 @@
                 </dl>
             </li>
             <li class="layui-nav-item">
-                <a href="${contextPath}/servlet/FrontLoginServlet?task=logout">退出 </a>
+                <a href="${contextPath}/servlet/FrontLoginServlet?task=logout">退出</a>
             </li>
         </c:if>
+        <li class="layui-nav-item">
+            <a href="${contextPath}/admin/admin_index.jsp">后台管理</a>
+        </li>
     </ul>
 </div>
 </body>

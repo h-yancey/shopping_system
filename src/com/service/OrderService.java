@@ -42,15 +42,7 @@ public class OrderService {
         orderDao.updateOrderAudit(orderBean);
     }
 
-//    public void deleteItem(int itemId) throws Exception {
-//        boolean isExist = itemDao.isExistItemId(itemId);
-//        if (isExist) {
-//            itemDao.deleteItem(itemId);
-//        } else {
-//            throw new Exception("您要删除的商品不存在");
-//        }
-//    }
-//
-
-
+    public void updateOrder(OrderBean orderBean) throws SQLException {
+        orderDao.updateOrder(orderBean);
+    }
 }

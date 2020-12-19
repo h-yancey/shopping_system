@@ -24,9 +24,7 @@
     <![endif]-->
 
     <script>
-        layui.use(['form'], function () {
-            form = layui.form;
-        });
+        layui.use(['form']);
 
 
         // 分类展开收起的分类的逻辑
@@ -82,9 +80,7 @@
         }
 
         function deleteType(typeId, parentId) {
-            layer.confirm("是否删除该类别？", {
-                btn: ['是', '否']
-            }, function () {
+            layer.confirm("是否删除该类别？", {btn: ['是', '否']}, function () {
                 var deleteUrl = "${contextPath}/servlet/TypeServlet?task=delete";
                 var data = {
                     typeId: typeId,
@@ -94,20 +90,14 @@
                     var flag = jsonData.flag;
                     var message = jsonData.message;
                     if (flag) {
-                        layer.alert('已删除!', {
-                                icon: 1,
-                                btn1: function () {
-                                    window.location.reload();
-                                }
-                            }
-                        );
-                    } else {
-                        layer.alert("删除失败，原因：" + message, {
-                            icon: 2
+                        layer.msg('已删除', {icon: 1, time: 1000,}, function () {
+                            window.location.reload();
                         });
+                    } else {
+                        layer.alert("删除失败，原因：" + message, {icon: 2});
                     }
                 }, "json")
-            })
+            });
         }
     </script>
 </head>

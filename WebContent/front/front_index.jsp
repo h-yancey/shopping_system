@@ -25,17 +25,13 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script>
-        layui.use(['form'], function () {
-        });
+        layui.use(['form']);
 
         function submitSearchForm() {
             var priceMin = $("#search_form input[name='priceMin']").val();
             var priceMax = $("#search_form input[name='priceMax']").val();
             if (priceMin != "" && isNaN(priceMin) || priceMax != "" && isNaN(priceMax)) {
-                layer.msg("价格区间需为数字", {
-                    icon: 0,
-                    time: 1000
-                });
+                layer.msg("价格区间需为数字", {icon: 0, time: 1000});
             } else {
                 var url = "${contextPath}?"
                 var formData = $("#search_form").serializeArray();

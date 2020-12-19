@@ -150,11 +150,54 @@ public class OrderServlet extends HttpServlet {
         }
     }
 
-    private void editOrder(HttpServletRequest req, HttpServletResponse resp) {
-
+    private void editOrder(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String orderId = req.getParameter("orderId");
+        try {
+            OrderBean orderBean = orderService.getOrder(Integer.parseInt(orderId));
+            req.setAttribute("orderBean", orderBean);
+            String forwardUrl = "/admin/order_edit.jsp";
+            req.getRequestDispatcher(forwardUrl).forward(req, resp);
+        } catch (Exception e) {
+            String redirectUrl = req.getContextPath() + "/admin/admin_index.jsp";
+            resp.sendRedirect(redirectUrl);
+        }
     }
 
-    private void updateOrder(HttpServletRequest req, HttpServletResponse resp) {
+    private void updateOrder(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String orderId = req.getParameter("orderId");
+        String payType = req.getParameter("payType");
+        String sendType = req.getParameter("sendType");
+        String consignee = req.getParameter("consignee");
+        String address = req.getParameter("address");
+        String postcode = req.getParameter("postcode");
+        String phone = req.getParameter("phone");
+        String email = req.getParameter("email");
 
+        OrderBean orderBean = new OrderBean();
+        orderBean.setOrderId(Integer.parseInt(orderId));
+        orderBean.setPayType(payType);
+        orderBean.setSendType(sendType);
+        orderBean.setConsignee(consignee);
+        orderBean.setAddress(address);
+        orderBean.setPostcode(postcode);
+        orderBean.setPhone(phone);
+        orderBean.setEmail(email);
+
+        PrintWriter out = resp.getWriter();
+        Gson gson = new Gson();
+        ResponseInfo responseInfo = new ResponseInfo();
+        try {
+            orderService.updateOrder(orderBean);
+            responseInfo.setFlag(true);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            responseInfo.setFlag(false);
+            responseInfo.setMessage(e.getMessage());
+        } finally {
+            String json = gson.toJson(responseInfo);
+            out.print(json);
+            out.flush();
+            out.close();
+        }
     }
 }

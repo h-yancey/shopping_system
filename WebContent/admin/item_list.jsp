@@ -58,10 +58,7 @@
             var priceMin = $("#search_form input[name='priceMin']").val();
             var priceMax = $("#search_form input[name='priceMax']").val();
             if (priceMin != "" && isNaN(priceMin) || priceMax != "" && isNaN(priceMax)) {
-                layer.msg("价格区间需为数字", {
-                    icon: 0,
-                    time: 1000
-                });
+                layer.msg("价格区间需为数字", {icon: 0, time: 1000});
             } else {
                 $("#search_form").submit();
             }

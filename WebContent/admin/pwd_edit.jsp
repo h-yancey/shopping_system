@@ -22,9 +22,7 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script>
-        layui.use(['form', 'layer'],
-            function () {
-            });
+        layui.use(['form', 'layer']);
 
         $(function () {
             var validator = $("#update_pwd_form").validate({
@@ -66,20 +64,12 @@
                         var flag = jsonData.flag;
                         var message = jsonData.message;
                         if (flag) {
-                            layer.alert("密码修改成功", {
-                                    icon: 1
-                                },
-                                function () {
-                                    //关闭当前frame
-                                    xadmin.close();
-
-                                    // 可以对父窗口进行刷新
-                                    xadmin.father_reload();
-                                })
+                            layer.msg("密码修改成功", {icon: 1, time: 1000}, function () {
+                                // 可以对父窗口进行刷新
+                                xadmin.father_reload();
+                            })
                         } else {
-                            layer.alert("密码修改失败，原因：" + message, {
-                                icon: 2
-                            });
+                            layer.alert("密码修改失败，原因：" + message, {icon: 2});
                         }
                     }, "json");
                 }

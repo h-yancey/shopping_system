@@ -83,7 +83,7 @@
                         </tr>
                         <tr>
                             <td>审核时间</td>
-                            <td>${orderBean.auditDate}</td>
+                            <td><fmt:formatDate value="${orderBean.auditDate}" pattern="yyyy-MM-dd HH:mm:ss"></fmt:formatDate></td>
                         </tr>
                         <tr>
                             <td>不通过原因</td>

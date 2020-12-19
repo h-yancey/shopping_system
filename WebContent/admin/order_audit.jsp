@@ -30,11 +30,7 @@
             $.post(url, formData, function (jsonData) {
                 var flag = jsonData.flag;
                 if (flag) {
-                    layer.msg("保存成功", {icon: 1,time: 1000}, function () {
-                        //关闭当前frame
-                        xadmin.close();
-
-                        // 可以对父窗口进行刷新
+                    layer.msg("保存成功", {icon: 1, time: 1000}, function () {
                         xadmin.father_reload();
                     });
                 } else {
@@ -52,7 +48,7 @@
             <div class="layui-card">
                 <div class="layui-card-body ">
                     <form class="layui-form" id="audit_form">
-                        <input type="hidden" value="${orderBean.orderId}">
+                        <input type="hidden" name="orderId" value="${orderBean.orderId}">
                         <div class="layui-form-item">
                             <label class="layui-form-label">审核状态</label>
                             <div class="layui-input-inline">
@@ -67,7 +63,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">订单反馈</label>
                             <div class="layui-input-inline" style="width: 400px">
-                                <textarea placeholder="请输入内容" name="msg"  class="layui-textarea">${orderBean.msg}</textarea>
+                                <textarea placeholder="请输入内容" name="msg" class="layui-textarea">${orderBean.msg}</textarea>
                             </div>
                         </div>
                         <div class="layui-form-item">

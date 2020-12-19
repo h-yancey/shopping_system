@@ -47,39 +47,50 @@
             });
         }
 
-        function updateCartItemCount(itemId, itemCount) {
-            if (itemCount.match('^[0-9]*$')) {
+        function updateCartItemCount(object, itemId, prevItemCount) {
+            var itemCount = object.value;
+            if (itemCount.match('^[0-9]*$') && itemCount > 0) {
                 var url = "${contextPath}/cart?task=updateCartItemCount";
                 var data = {
                     itemId: itemId,
                     itemCount: itemCount
                 }
                 $.post(url, data, function () {
-                    layer.msg("数量修改成功", {icon: 1, time: 1000}, function () {
-                        //location.reload();
-                    });
+                    location.reload();
+                    // layer.msg("数量修改成功", {icon: 1, time: 1000}, function () {
+                    //     location.reload();
+                    // });
                 });
             } else {
-                layer.msg("数量必须是自然数", {icon: 2, time: 1000}, function () {
-                    var defaultVal = $("#itemCount").attr("default-val");
-                    $("#itemCount").val(defaultVal);
+                layer.msg("商品数量必须是非负整数", {icon: 2, time: 1000}, function () {
+                    object.value = prevItemCount;
                 });
             }
         }
 
-        function decCartItemCount(itemId) {
-            var itemCount = $("itemCount").val() - 1;
-            updateCartItemCount(itemId, itemCount);
+        function decCartItemCount(object, itemId) {
+            var input = $(object).siblings("input");
+            var prevItemCount = input.val();
+            var itemCount = Number(prevItemCount) - 1;
+            input.val(itemCount);
+            updateCartItemCount(input[0], itemId, prevItemCount);
         }
 
-        function incCartItemCount(itemId) {
-            var itemCount = $("itemCount").val() + 1;
-            updateCartItemCount(itemId, itemCount);
+        function incCartItemCount(object, itemId) {
+            var input = $(object).siblings("input");
+            var prevItemCount = input.val();
+            var itemCount = Number(prevItemCount) + 1;
+            input.val(itemCount);
+            updateCartItemCount(input[0], itemId, prevItemCount);
+        }
+
+        function keyDownEvent(event, object, itemId, prevItemCount) {
+            if (event.keyCode == 13) {
+                updateCartItemCount(object, itemId, prevItemCount);
+                $(object).blur();
+            }
         }
     </script>
-    <style>
-
-    </style>
 </head>
 <body>
 <c:import url="common/header.jsp"></c:import>
@@ -88,7 +99,7 @@
     <div class="layui-card" style="margin-left: 200px;margin-right: 200px">
         <div class="layui-card-body">
             <div class="layui-row">
-                <table class="layui-table layui-form" >
+                <table class="layui-table layui-form">
                     <c:if test="${empty cartItemSet}">
                         <tr>
                             <td colspan="8" align="center" style="font-size: 20px;"><i class="layui-icon-tips layui-icon"></i>
@@ -117,23 +128,21 @@
                                 <td align="right">￥<fmt:formatNumber value="${orderItemBean.itemPrice}" pattern="#,###.00"></fmt:formatNumber></td>
                                 <td align="center">
                                     <div>
-                                        <a href="javascript:;" class="layui-btn layui-btn-xs" style="width: 30px;height: 30px" onclick="decCartItemCount(${orderItemBean.itemId})">
+                                        <a href="javascript:;" class="layui-btn layui-btn-xs" style="width: 30px;height: 30px" onclick="decCartItemCount(this,${orderItemBean.itemId})">
                                             <i class="layui-icon">-</i>
                                         </a>
-                                        <input type="text" class="layui-input layui-input-inline" onblur="updateCartItemCount(${orderItemBean.itemId},this.value)"
-                                               value="${orderItemBean.itemCount}" style="text-align: center;height: 30px;width: 40px;padding: 0px">
-                                        <a href="javascript:;" class="layui-btn layui-btn-xs" style="width: 30px;height: 30px" onclick="incCartItemCount(${orderItemBean.itemId})">
+                                        <input type="text" class="layui-input layui-input-inline" style="text-align: center;height: 30px;width: 40px;padding: 0px"
+                                               onblur="updateCartItemCount(this,${orderItemBean.itemId},${orderItemBean.itemCount})"
+                                               onkeydown="keyDownEvent(event,this,${orderItemBean.itemId},${orderItemBean.itemCount})"
+                                               value="${orderItemBean.itemCount}">
+                                        <a href="javascript:;" class="layui-btn layui-btn-xs" style="width: 30px;height: 30px" onclick="incCartItemCount(this,${orderItemBean.itemId})">
                                             <i class="layui-icon">+</i>
                                         </a>
                                     </div>
 
                                 </td>
-                                <td align="right">￥<fmt:formatNumber value="${orderItemBean.totalPrice}" pattern="#,###.00"></fmt:formatNumber></td>
+                                <td align="right">￥<fmt:formatNumber value="${orderItemBean.totalPrice}" pattern="#,##0.00"></fmt:formatNumber></td>
                                 <td class="td-manage" align="center">
-                                        <%--                                <button class="layui-btn layui-btn layui-btn-xs"--%>
-                                        <%--                                        onclick="xadmin.open('编辑商品','${contextPath}/servlet/ItemServlet?task=edit&itemId=${orderItemBean.itemId}')">--%>
-                                        <%--                                    <i class="layui-icon">&#xe642;</i>编辑--%>
-                                        <%--                                </button>--%>
                                     <a class="layui-btn-danger layui-btn layui-btn-xs" onclick="deleteCartItem(${orderItemBean.itemId})" href="javascript:;">
                                         <i class="layui-icon layui-icon-delete"></i>删除
                                     </a>
@@ -164,7 +173,6 @@
                     </c:if>
                 </table>
             </div>
-
         </div>
     </div>
 </div>

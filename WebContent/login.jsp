@@ -136,8 +136,7 @@
                             var flag = jsonData.flag;
                             var message = jsonData.message;
                             if (flag) {
-                                var indexUrl = "${contextPath}";
-                                window.location.href = indexUrl;
+                                window.location.href = message;
                             } else {
                                 layer.alert(message, {icon: 2});
                             }
@@ -164,8 +163,7 @@
                                 var flag = jsonData.flag;
                                 var message = jsonData.message;
                                 if (flag) {
-                                    var indexUrl = "${contextPath}";
-                                    window.location.href = indexUrl;
+                                    window.location.href = message;
                                 } else {
                                     layer.alert(message, {icon: 2});
                                 }
@@ -224,7 +222,7 @@
     <div class="message">用户登录</div>
     <div id="darkbannerwrap"></div>
     <form class="layui-form layui-form-pane" id="login_form">
-
+        <input type="hidden" name="referer" value="${header.referer}">
         <div class="layui-form-item">
             <label class="layui-form-label" style="height: 50px;width: 15%;">
                 <i class="layui-icon layui-icon-username" style="line-height:30px;font-size:18px"></i>

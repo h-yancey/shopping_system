@@ -25,6 +25,8 @@
     <![endif]-->
 
     <script>
+        layui.use(['form', 'layer']);
+
         function showLargeImg(src) {
             layer.photos({
                 photos: {
@@ -40,7 +42,7 @@
                         },
                     ]
                 }
-                ,anim: 0 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                , anim: 0 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
             })
         }
 
@@ -158,20 +160,12 @@
                             var flag = jsonData.flag;
                             var message = jsonData.message;
                             if (flag) {
-                                layer.alert("修改成功", {
-                                        icon: 1
-                                    },
-                                    function () {
-                                        //关闭当前frame
-                                        xadmin.close();
-
-                                        // 可以对父窗口进行刷新
-                                        xadmin.father_reload();
-                                    })
+                                layer.msg("修改成功", {icon: 1, time: 1000}, function () {
+                                    // 可以对父窗口进行刷新
+                                    xadmin.father_reload();
+                                })
                             } else {
-                                layer.alert("修改失败，原因：" + message, {
-                                    icon: 2
-                                });
+                                layer.alert("修改失败，原因：" + message, {icon: 2});
                             }
                         },
                         error: function () {
@@ -207,8 +201,6 @@
                 }
             })
         });
-
-        layui.use(['form', 'layer']);
     </script>
     <style>
         input.error {
