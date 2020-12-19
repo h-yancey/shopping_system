@@ -18,6 +18,9 @@ import com.bean.TypeBean;
 import com.util.JdbcUtil;
 
 public class TypeDao {
+    /**
+     * 获取所有大类类别
+     */
     public List<TypeBean> getParentTypeList() {
         String sql = "SELECT * FROM t_mc_type WHERE parentId = 0 ORDER BY typeId ASC";
         List<TypeBean> typeList = null;
@@ -33,6 +36,9 @@ public class TypeDao {
         return typeList;
     }
 
+    /**
+     * 获取父类编号为parentId的所有小类类别
+     */
     public List<TypeBean> getChildTypeList(int parentId) {
         String sql = "SELECT * FROM t_mc_type WHERE parentId = ? ORDER BY typeId ASC";
         List<TypeBean> typeList = null;
@@ -98,7 +104,7 @@ public class TypeDao {
         }
     }
 
-    public void deleteType(int typeId) throws SQLException {
+    public void deleteTypeById(int typeId) throws SQLException {
         String sql = "DELETE FROM t_mc_type WHERE typeId = ?";
         Connection conn = JdbcUtil.getConnection();
         QueryRunner runner = new QueryRunner();
@@ -126,7 +132,7 @@ public class TypeDao {
         }
     }
 
-    public TypeBean getTypeById(int typeId) throws SQLException {
+    public TypeBean getType(int typeId) throws SQLException {
         String sql = "SELECT * FROM t_mc_type WHERE typeId = ?";
         TypeBean typeBean = null;
         Connection conn = JdbcUtil.getConnection();
@@ -142,12 +148,16 @@ public class TypeDao {
         return typeBean;
     }
 
-    public void updateType(int typeId, TypeBean typeBean) throws SQLException {
-        String sql = "UPDATE t_mc_type SET typeId = ?, typeName = ?, parentId = ? WHERE typeId = ?";
+    public void updateType(TypeBean typeBean) throws SQLException {
+        String sql = "UPDATE t_mc_type SET typeName = ?, parentId = ? WHERE typeId = ?";
+        String typeName = typeBean.getTypeName();
+        int parentId = typeBean.getParentId();
+        int typeId = typeBean.getTypeId();
+        Object[] params = {typeName, parentId, typeId};
         Connection conn = JdbcUtil.getConnection();
         QueryRunner runner = new QueryRunner();
         try {
-            runner.update(conn, sql, typeBean.getTypeId(), typeBean.getTypeName(), typeBean.getParentId(), typeId);
+            runner.update(conn, sql, params);
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -157,6 +167,9 @@ public class TypeDao {
     }
 
 
+    /**
+     * 判断类别编号为parentId的大类下是否有商品名称为typeName的商品
+     */
     public boolean isExistTypeName(String typeName, int parentId) {
         String sql = "SELECT IFNULL(COUNT(typeName),0) AS is_exist_typename FROM t_mc_type WHERE typeName = ?  AND parentId = ?";
         Long cntTypeName = null;
@@ -175,6 +188,9 @@ public class TypeDao {
         return false;
     }
 
+    /**
+     * 判断类别编号为parentId的大类下是否有除类别编号为typeId以外的商品名称为typeName的商品
+     */
     public boolean isExistTypeName(int typeId, String typeName, int parentId) {
         String sql = "SELECT IFNULL(COUNT(typeName),0) AS is_exist_typename FROM t_mc_type WHERE typeId != ? AND typeName = ? AND parentId = ?";
         Long cntTypeName = null;
@@ -215,18 +231,4 @@ public class TypeDao {
         return typeMap;
     }
 
-//    public int getTypeCount() {
-//        String sql = "SELECT IFNULL(COUNT(nid),0) AS type_count FROM t_mc_type";
-//        Long typeCount = null;
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        try {
-//            typeCount = (Long) runner.query(conn, sql, new ScalarHandler("type_count"));
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//        return typeCount.intValue();
-//    }
 }

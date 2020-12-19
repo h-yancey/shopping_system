@@ -1,6 +1,5 @@
 package com.servlet.front;
 
-import com.bean.ItemBean;
 import com.bean.OrderBean;
 import com.bean.OrderItemBean;
 import com.bean.UserBean;
@@ -24,9 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- */
 @WebServlet(urlPatterns = "/member")
 public class MemberServlet extends HttpServlet {
     private UserService userService = new UserService();
@@ -62,11 +58,11 @@ public class MemberServlet extends HttpServlet {
      */
     private void refreshLoginFrontUser(HttpServletRequest req, int userid) throws Exception {
         HttpSession session = req.getSession();
-        UserBean frontUserBean = userService.getUser(userid);
+        UserBean frontUserBean = userService.getUserById(userid);
         session.setAttribute("frontUserBean", frontUserBean);
     }
 
-    private void editProfile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void editProfile(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         PrintWriter out = resp.getWriter();
 
         try {
@@ -84,7 +80,7 @@ public class MemberServlet extends HttpServlet {
         }
     }
 
-    private void updateProfile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void updateProfile(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         HttpSession session = req.getSession();
         UserBean frontUserBean = (UserBean) session.getAttribute("frontUserBean");
         int userid = frontUserBean.getUserid();
@@ -110,7 +106,7 @@ public class MemberServlet extends HttpServlet {
         ResponseInfo responseInfo = new ResponseInfo();
         Gson gson = new Gson();
         try {
-            userService.updateUser(userid, userBean);
+            userService.updateUser(userBean);
             this.refreshLoginFrontUser(req, userid);
             responseInfo.setFlag(true);
         } catch (Exception e) {
@@ -125,7 +121,7 @@ public class MemberServlet extends HttpServlet {
         }
     }
 
-    private void editPwd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void editPwd(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         PrintWriter out = resp.getWriter();
 
         try {
@@ -143,7 +139,7 @@ public class MemberServlet extends HttpServlet {
         }
     }
 
-    private void updatePwd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void updatePwd(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         HttpSession session = req.getSession();
         UserBean frontUserBean = (UserBean) session.getAttribute("frontUserBean");
         int userid = frontUserBean.getUserid();
@@ -206,16 +202,11 @@ public class MemberServlet extends HttpServlet {
     }
 
     private void orderInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //HttpSession session = req.getSession();
-        //UserBean frontUserBean = (UserBean) session.getAttribute("frontUserBean");
-
         //查询参数
         String orderId = req.getParameter("orderId");
-        // String orderUser = frontUserBean.getUsername();
 
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("orderId", orderId);
-        // paramMap.put("orderUser", orderUser);
         req.setAttribute("paramMap", paramMap);
 
         try {

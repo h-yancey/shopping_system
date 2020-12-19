@@ -214,8 +214,19 @@
 <!-- 顶部开始 -->
 <div class="container">
     <div class="logo">
-        <a href="${contextPath}">购 物 商 城</a>
+        <a href="${contextPath}" style="font-size: 28px">购 物 商 城</a>
     </div>
+    <ul class="layui-nav left">
+        <li class="layui-nav-item">
+            <a href="${contextPath}"><i class="layui-icon layui-icon-home">&nbsp;首页</i></a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="${contextPath}/member"><i class="layui-icon layui-icon-user">&nbsp;会员中心</i></a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="${contextPath}/cart"><i class="layui-icon layui-icon-cart">&nbsp;购物车</i></a>
+        </li>
+    </ul>
     <ul class="layui-nav right">
         <li class="layui-nav-item">
             <a href="${contextPath}/login.jsp">登录</a>
@@ -286,11 +297,8 @@
                             <span class="x-red">*</span>性别
                         </label>
                         <div class="layui-input-inline">
-                            <input type="radio" name="sex" id="sex" value="男" title="男">
+                            <input type="radio" name="sex" value="男" title="男">
                             <input type="radio" name="sex" value="女" title="女">
-                        </div>
-                        <div class="layui-form-mid layui-word-aux">
-                            <label for="sex" class="error"></label>
                         </div>
                     </div>
                     <div class="layui-form-item">

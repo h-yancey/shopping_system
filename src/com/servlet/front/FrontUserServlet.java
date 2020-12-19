@@ -5,7 +5,6 @@ import com.bean.UserBean;
 import com.google.gson.Gson;
 import com.service.UserService;
 import com.util.GlobalUtil;
-import com.util.PageUtil;
 import com.util.ResponseInfo;
 
 import javax.servlet.ServletException;
@@ -16,13 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-/**
- *
- */
+
 @WebServlet(urlPatterns = "/servlet/FrontUserServlet")
 public class FrontUserServlet extends HttpServlet {
     private UserService userService = new UserService();
@@ -117,7 +111,7 @@ public class FrontUserServlet extends HttpServlet {
 
         String userid = req.getParameter("userid");
         try {
-            UserBean userBean = userService.getUser(Integer.parseInt(userid));
+            UserBean userBean = userService.getUserById(Integer.parseInt(userid));
             req.setAttribute("userBean", userBean);
 
             String forwardUrl = "/admin/user/admin_edit.jsp";
@@ -125,10 +119,8 @@ public class FrontUserServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             resp.setContentType("text/html");
-            //String redirectUrl = req.getContextPath() + "/servlet/ItemServlet?task=list";
             out.print("<script>");
             out.print("alert('" + e.getMessage() + "');");
-            // out.print("window.location.href='" + redirectUrl + "'");
             out.print("</script>");
         } finally {
             out.flush();
@@ -161,7 +153,7 @@ public class FrontUserServlet extends HttpServlet {
         ResponseInfo responseInfo = new ResponseInfo();
         Gson gson = new Gson();
         try {
-            userService.updateUser(Integer.parseInt(userid), userBean);
+            userService.updateUser(userBean);
             responseInfo.setFlag(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -201,7 +193,7 @@ public class FrontUserServlet extends HttpServlet {
 
         String userid = req.getParameter("userid");
         try {
-            UserBean userBean = userService.getUser(Integer.parseInt(userid));
+            UserBean userBean = userService.getUserById(Integer.parseInt(userid));
             req.setAttribute("userBean", userBean);
 
             String forwardUrl = "/admin/user/admin_edit_pwd.jsp";

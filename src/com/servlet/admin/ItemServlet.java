@@ -23,9 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.util.*;
 
-/**
- *
- */
 @WebServlet(urlPatterns = "/servlet/ItemServlet")
 public class ItemServlet extends HttpServlet {
     private ItemService itemService = new ItemService();
@@ -61,6 +58,7 @@ public class ItemServlet extends HttpServlet {
         String priceMin = req.getParameter("priceMin");
         String priceMax = req.getParameter("priceMax");
 
+        //封装查询参数
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("itemTypeId", itemTypeId);
         paramMap.put("keyword", keyword);
@@ -72,13 +70,12 @@ public class ItemServlet extends HttpServlet {
         PageUtil pageUtil = new PageUtil(req);
         pageUtil.setPageSize(5);
         pageUtil.setRsCount(itemService.getItemCount(paramMap));
-
         int pageSize = pageUtil.getPageSize();
         int currentPage = pageUtil.getCurrentPage();
         int rsCount = pageUtil.getRsCount();
         int pageCount = pageUtil.getPageCount();
-
         int beginIndex = (currentPage - 1) * pageSize;
+
         List<ItemBean> itemList = itemService.getItemList(beginIndex, pageSize, paramMap);
         req.setAttribute("itemList", itemList);
 
@@ -106,7 +103,7 @@ public class ItemServlet extends HttpServlet {
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 
-    private void save(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void save(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         FileItemFactory fileItemFactory = new DiskFileItemFactory();
         ServletFileUpload fileUpload = new ServletFileUpload(fileItemFactory);
 
@@ -127,8 +124,6 @@ public class ItemServlet extends HttpServlet {
                 } else {
                     String imgName = fileItem.getName();
                     if (!GlobalUtil.isEmpty(imgName)) {
-                        //String filePath = GlobalUtil.getTimeStamp() + "_" + fileName;
-                        //  long filesize = fileItem.getSize();
 
                         imgName = GlobalUtil.getTimeStamp() + "_" + imgName;
                         InputStream inputStream = fileItem.getInputStream();
@@ -143,24 +138,21 @@ public class ItemServlet extends HttpServlet {
                         IOUtils.copy(inputStream, outputStream1);
 
                         dataMap.put("imgName", imgName);
-                        //  dataMap.put("filePath", filePath);
                         IOUtils.closeQuietly(inputStream);
                         IOUtils.closeQuietly(outputStream);
                         IOUtils.closeQuietly(outputStream1);
                     } else {
                         dataMap.put("imgName", "");
-                        //    dataMap.put("filePath", "");
                     }
                 }
             }
 
-            //System.out.println(dataMap);
             ItemBean itemBean = new ItemBean();
             dataMap.put("addDate", GlobalUtil.parseDateTime((String) dataMap.get("addDate")));
             BeanUtils.populate(itemBean, dataMap);
 
             int smallTypeId = itemBean.getSmallTypeId();
-            TypeBean typeBean = typeService.getTypeById(smallTypeId);
+            TypeBean typeBean = typeService.getType(smallTypeId);
             int parentId = typeBean.getParentId();
             itemBean.setBigTypeId(parentId);
 
@@ -304,12 +296,11 @@ public class ItemServlet extends HttpServlet {
             BeanUtils.populate(itemBean, dataMap);
 
             int smallTypeId = itemBean.getSmallTypeId();
-            TypeBean typeBean = typeService.getTypeById(smallTypeId);
+            TypeBean typeBean = typeService.getType(smallTypeId);
             int parentId = typeBean.getParentId();
             itemBean.setBigTypeId(parentId);
 
-            String itemId = (String) dataMap.get("itemId");
-            itemService.updateItem(Integer.parseInt(itemId), itemBean);
+            itemService.updateItem(itemBean);
             responseInfo.setFlag(true);
         } catch (Exception e) {
             e.printStackTrace();

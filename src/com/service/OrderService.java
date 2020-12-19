@@ -31,7 +31,6 @@ public class OrderService {
 
     public OrderBean getOrder(int orderId) throws Exception {
         OrderBean orderBean = orderDao.getOrder(orderId);
-
         if (orderBean == null) {
             throw new Exception("订单不存在");
         }

@@ -20,9 +20,7 @@ import java.io.*;
 
 import java.util.*;
 
-/**
- *
- */
+
 @WebServlet(urlPatterns = "/servlet/UserServlet")
 public class UserServlet extends HttpServlet {
     private UserService userService = new UserService();
@@ -79,13 +77,12 @@ public class UserServlet extends HttpServlet {
         PageUtil pageUtil = new PageUtil(req);
         pageUtil.setPageSize(5);
         pageUtil.setRsCount(userService.getUserCount(paramMap));
-
         int pageSize = pageUtil.getPageSize();
         int currentPage = pageUtil.getCurrentPage();
         int rsCount = pageUtil.getRsCount();
         int pageCount = pageUtil.getPageCount();
-
         int beginIndex = (currentPage - 1) * pageSize;
+
         List<UserBean> userList = userService.getUserList(beginIndex, pageSize, paramMap);
         req.setAttribute("userList", userList);
 
@@ -114,13 +111,12 @@ public class UserServlet extends HttpServlet {
         PageUtil pageUtil = new PageUtil(req);
         pageUtil.setPageSize(5);
         pageUtil.setRsCount(userService.getUserCount(paramMap));
-
         int pageSize = pageUtil.getPageSize();
         int currentPage = pageUtil.getCurrentPage();
         int rsCount = pageUtil.getRsCount();
         int pageCount = pageUtil.getPageCount();
-
         int beginIndex = (currentPage - 1) * pageSize;
+
         List<UserBean> userList = userService.getUserList(beginIndex, pageSize, paramMap);
         req.setAttribute("userList", userList);
 
@@ -139,7 +135,15 @@ public class UserServlet extends HttpServlet {
         Gson gson = new Gson();
 
         try {
-            userService.updateLock(Integer.parseInt(userid));
+            UserBean userBean = userService.getUserById(Integer.parseInt(userid));
+            String lockTag = userBean.getLockTag();//原先的冻结状态
+            if ("0".equals(lockTag)) {
+                //状态为未冻结，冻结用户
+                userService.lockUser(Integer.parseInt(userid));
+            } else if ("1".equals(lockTag)) {
+                //状态为已冻结，解冻用户
+                userService.unlockUser(Integer.parseInt(userid));
+            }
             responseInfo.setFlag(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -228,7 +232,7 @@ public class UserServlet extends HttpServlet {
         ResponseInfo responseInfo = new ResponseInfo();
         Gson gson = new Gson();
         try {
-            userService.deleteUser(Integer.parseInt(userid));
+            userService.deleteUserById(Integer.parseInt(userid));
             responseInfo.setFlag(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -247,7 +251,7 @@ public class UserServlet extends HttpServlet {
 
         String userid = req.getParameter("userid");
         try {
-            UserBean userBean = userService.getUser(Integer.parseInt(userid));
+            UserBean userBean = userService.getUserById(Integer.parseInt(userid));
             req.setAttribute("userBean", userBean);
 
             String forwardUrl = "/admin/user/admin_edit.jsp";
@@ -291,7 +295,7 @@ public class UserServlet extends HttpServlet {
         ResponseInfo responseInfo = new ResponseInfo();
         Gson gson = new Gson();
         try {
-            userService.updateUser(Integer.parseInt(userid), userBean);
+            userService.updateUser(userBean);
             responseInfo.setFlag(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -326,12 +330,12 @@ public class UserServlet extends HttpServlet {
         out.close();
     }
 
-    private void editAdminPwd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void editAdminPwd(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         PrintWriter out = resp.getWriter();
 
         String userid = req.getParameter("userid");
         try {
-            UserBean userBean = userService.getUser(Integer.parseInt(userid));
+            UserBean userBean = userService.getUserById(Integer.parseInt(userid));
             req.setAttribute("userBean", userBean);
 
             String forwardUrl = "/admin/user/admin_edit_pwd.jsp";
@@ -339,10 +343,8 @@ public class UserServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             resp.setContentType("text/html");
-            //String redirectUrl = req.getContextPath() + "/servlet/ItemServlet?task=list";
             out.print("<script>");
             out.print("alert('" + e.getMessage() + "');");
-            // out.print("window.location.href='" + redirectUrl + "'");
             out.print("</script>");
         } finally {
             out.flush();

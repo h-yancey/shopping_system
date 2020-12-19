@@ -30,7 +30,7 @@
 <body>
 <div class="container">
     <div class="logo">
-        <a href="${contextPath}">购 物 商 城</a>
+        <a href="${contextPath}" style="font-size: 28px">购 物 商 城</a>
     </div>
     <ul class="layui-nav left">
         <li class="layui-nav-item">

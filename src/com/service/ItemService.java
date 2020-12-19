@@ -29,6 +29,7 @@ public class ItemService {
             if (isExistItemId) {
                 throw new Exception("添加的商品编号已存在，请更改商品编号");
             }
+            //商品编号未重复，添加商品
             itemDao.saveItem(itemBean);
         }
     }
@@ -36,7 +37,7 @@ public class ItemService {
     public void deleteItem(int itemId) throws Exception {
         boolean isExist = itemDao.isExistItemId(itemId);
         if (isExist) {
-            itemDao.deleteItem(itemId);
+            itemDao.deleteItemById(itemId);
         } else {
             throw new Exception("您要删除的商品不存在");
         }
@@ -44,15 +45,14 @@ public class ItemService {
 
     public ItemBean getItem(int itemId) throws Exception {
         ItemBean itemBean = itemDao.getItem(itemId);
-
         if (itemBean == null) {
             throw new Exception("您要修改的商品不存在");
         }
         return itemBean;
     }
 
-    public void updateItem(int itemId, ItemBean itemBean) throws SQLException {
-        itemDao.updateItem(itemId, itemBean);
+    public void updateItem(ItemBean itemBean) throws SQLException {
+        itemDao.updateItem(itemBean);
     }
 
     public int getItemCount(Map<String, String> paramMap) {

@@ -1,11 +1,9 @@
 package com.servlet.admin;
 
-import com.bean.ItemBean;
 import com.bean.TypeBean;
 import com.google.gson.Gson;
 import com.service.ItemService;
 import com.service.TypeService;
-import com.util.PageUtil;
 import com.util.ResponseInfo;
 
 import javax.servlet.ServletException;
@@ -125,7 +123,7 @@ public class TypeServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
         String typeId = req.getParameter("typeId");
         try {
-            TypeBean typeBean = typeService.getTypeById(Integer.parseInt(typeId));
+            TypeBean typeBean = typeService.getType(Integer.parseInt(typeId));
             req.setAttribute("typeBean", typeBean);
 
             List<TypeBean> parentTypeList = typeService.getParentTypeList();
@@ -147,7 +145,7 @@ public class TypeServlet extends HttpServlet {
         }
     }
 
-    private void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         //获取表单数据
         String typeId = req.getParameter("typeId");
         String typeName = req.getParameter("typeName");
@@ -162,7 +160,7 @@ public class TypeServlet extends HttpServlet {
         ResponseInfo responseInfo = new ResponseInfo();
         Gson gson = new Gson();
         try {
-            typeService.updateType(Integer.parseInt(typeId), typeBean);
+            typeService.updateType(typeBean);
             responseInfo.setFlag(true);
         } catch (Exception e) {
             e.printStackTrace();

@@ -9,7 +9,6 @@ public class TypeBean {
     private List<TypeBean> childTypeList;//子类别
 
     public TypeBean() {
-
     }
 
     public int getTypeId() {

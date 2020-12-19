@@ -15,9 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- *
- */
+
 @WebServlet(urlPatterns = "/servlet/ProfileServlet")
 public class ProfileServlet extends HttpServlet {
     private UserService userService = new UserService();
@@ -86,7 +84,7 @@ public class ProfileServlet extends HttpServlet {
         ResponseInfo responseInfo = new ResponseInfo();
         Gson gson = new Gson();
         try {
-            userService.updateUser(userid, userBean);
+            userService.updateUser(userBean);
             responseInfo.setFlag(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,10 +107,8 @@ public class ProfileServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             resp.setContentType("text/html");
-            //String redirectUrl = req.getContextPath() + "/servlet/ItemServlet?task=list";
             out.print("<script>");
             out.print("alert('" + e.getMessage() + "');");
-            // out.print("window.location.href='" + redirectUrl + "'");
             out.print("</script>");
         } finally {
             out.flush();

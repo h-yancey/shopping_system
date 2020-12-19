@@ -1,9 +1,7 @@
 package com.dao;
 
 
-import com.bean.ItemBean;
 import com.bean.OrderBean;
-import com.bean.TypeBean;
 import com.util.GlobalUtil;
 import com.util.JdbcUtil;
 import org.apache.commons.dbutils.DbUtils;
@@ -36,6 +34,9 @@ public class OrderDao {
         return maxOrderId.intValue();
     }
 
+    /**
+     * 拼接sql语句的查询条件参数
+     */
     private String getSearchSql(Map<String, String> paramMap) {
         StringBuffer searchSql = new StringBuffer();
         String orderDate = paramMap.get("orderDate");
@@ -61,6 +62,7 @@ public class OrderDao {
             searchSql.append(" and orderDate <= '" + endDate + " 23:59:59'");
         }
         if (!GlobalUtil.isEmpty(itemName)) {
+            //拼接子查询
             searchSql.append(" and orderId in (select orderId from t_order_item where itemName like '%" + itemName + "%')");
         }
         return searchSql.toString();
@@ -106,6 +108,9 @@ public class OrderDao {
         return orderList;
     }
 
+    /**
+     * 保存除了审核相关的字段以外的其他字段
+     */
     public void saveOrder(OrderBean orderBean) throws SQLException {
         int orderId = orderBean.getOrderId();
         String orderUser = orderBean.getOrderUser();
@@ -153,6 +158,9 @@ public class OrderDao {
         return orderBean;
     }
 
+    /**
+     * 修改订单信息中的审核相关的字段，有审核（订单）状态auditStatus、订单反馈msg、审核用户auditUser、审核日期auditDate
+     */
     public void updateOrderAudit(OrderBean orderBean) throws SQLException {
         String sql = "UPDATE t_order SET auditStatus = ?, msg = ?, auditUser = ?, auditDate = ? WHERE orderId = ?";
         Connection conn = JdbcUtil.getConnection();
@@ -173,6 +181,9 @@ public class OrderDao {
         }
     }
 
+    /**
+     * 修改订单信息中的付款方式payType、发货方式sendType、收货人consignee、地址address、邮编postcode、电话phone、邮箱email
+     */
     public void updateOrder(OrderBean orderBean) throws SQLException {
         String sql = "UPDATE t_order SET payType = ?, sendType = ?, consignee = ?, address = ?, postcode = ?, phone = ?, email = ? WHERE orderId = ?";
         Connection conn = JdbcUtil.getConnection();

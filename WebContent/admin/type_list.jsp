@@ -141,7 +141,7 @@
                     <table class="layui-table layui-form">
                         <thead>
                         <tr>
-                            <th width="10%"><input type="checkbox" name="" lay-skin="primary"></th>
+<%--                            <th width="10%"><input type="checkbox" name="" lay-skin="primary"></th>--%>
                             <th width="20%">类别编号</th>
                             <th width="25%">类别名称</th>
                             <th width="20%">父类编号</th>

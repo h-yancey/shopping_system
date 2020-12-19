@@ -1,7 +1,6 @@
 package com.dao;
 
 
-import com.bean.OrderBean;
 import com.bean.OrderItemBean;
 import com.util.GlobalUtil;
 import com.util.JdbcUtil;
@@ -13,12 +12,14 @@ import org.apache.commons.dbutils.handlers.ScalarHandler;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 
 public class OrderItemDao {
+    /**
+     * 拼接sql语句的查询条件参数
+     */
     private String getSearchSql(Map<String, String> paramMap) {
         StringBuffer searchSql = new StringBuffer();
         String orderId = paramMap.get("orderId");
@@ -123,62 +124,4 @@ public class OrderItemDao {
             DbUtils.closeQuietly(conn);
         }
     }
-
-
-//    public void deleteItem(int itemId) throws SQLException {
-//        String sql = "DELETE FROM t_mc WHERE itemId = ?";
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        try {
-//            runner.update(conn, sql, itemId);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw e;
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//    }
-//
-//    public ItemBean getItem(int itemId) throws SQLException {
-//        String sql = "SELECT * FROM t_mc WHERE itemId = ?";
-//        ItemBean itemBean = null;
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        try {
-//            itemBean = runner.query(conn, sql, new BeanHandler<>(ItemBean.class), itemId);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw e;
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//        return itemBean;
-//    }
-//
-//    public void updateItem(int itemId, ItemBean itemBean) throws SQLException {
-//        String sql = "UPDATE t_mc SET itemId = ?, itemName = ?, itemDesc = ?, itemPrice = ?, imgName = ?, shortageTag = ?, addDate = ?, bigTypeId " + "=" + " ?, smallTypeId = " + "? WHERE itemId
-//        = ?";
-//        Connection conn = JdbcUtil.getConnection();
-//        QueryRunner runner = new QueryRunner();
-//        int itemIdNew = itemBean.getItemId();
-//        String itemName = itemBean.getItemName();
-//        String itemDesc = itemBean.getItemDesc();
-//        BigDecimal itemPrice = itemBean.getItemPrice();
-//        String imgName = itemBean.getImgName();
-//        String shortageTag = itemBean.getShortageTag();
-//        Date addDate = itemBean.getAddDate();
-//        int bigTypeId = itemBean.getBigTypeId();
-//        int smallTypeId = itemBean.getSmallTypeId();
-//        Object[] params = {itemId, itemName, itemDesc, itemPrice, imgName, shortageTag, addDate, bigTypeId, smallTypeId, itemIdNew};
-//        try {
-//            runner.update(conn, sql, params);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            throw e;
-//        } finally {
-//            DbUtils.closeQuietly(conn);
-//        }
-//    }
-
-
 }

@@ -214,8 +214,19 @@
 <!-- 顶部开始 -->
 <div class="container">
     <div class="logo">
-        <a href="${contextPath}">购 物 商 城</a>
+        <a href="${contextPath}" style="font-size: 28px">购 物 商 城</a>
     </div>
+    <ul class="layui-nav left">
+        <li class="layui-nav-item">
+            <a href="${contextPath}"><i class="layui-icon layui-icon-home">&nbsp;首页</i></a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="${contextPath}/member"><i class="layui-icon layui-icon-user">&nbsp;会员中心</i></a>
+        </li>
+        <li class="layui-nav-item">
+            <a href="${contextPath}/cart"><i class="layui-icon layui-icon-cart">&nbsp;购物车</i></a>
+        </li>
+    </ul>
 </div>
 <!-- 顶部结束 -->
 <div class="login layui-anim layui-anim-up">

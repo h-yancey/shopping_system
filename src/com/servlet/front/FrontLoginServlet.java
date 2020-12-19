@@ -6,7 +6,6 @@ import com.service.UserService;
 import com.util.GlobalUtil;
 import com.util.ResponseInfo;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,20 +14,18 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- *
- */
+
 @WebServlet(urlPatterns = "/servlet/FrontLoginServlet")
 public class FrontLoginServlet extends HttpServlet {
     private UserService userService = new UserService();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         this.doPost(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String task = req.getParameter("task");
         if ("login".equals(task)) {
             login(req, resp);
@@ -37,7 +34,7 @@ public class FrontLoginServlet extends HttpServlet {
         }
     }
 
-    private void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void login(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String username = req.getParameter("username");
         String pwd = req.getParameter("pwd");
         String referer = req.getParameter("referer");
@@ -58,7 +55,6 @@ public class FrontLoginServlet extends HttpServlet {
                 session.setAttribute("frontUserBean", userBean);
                 userService.updateLoginParams(userBean);
                 responseInfo.setFlag(true);
-                System.out.println(referer);
                 if (GlobalUtil.isEmpty(referer)) {
                     //referer为空时，跳转到的url为首页
                     responseInfo.setMessage(req.getContextPath());
@@ -77,7 +73,7 @@ public class FrontLoginServlet extends HttpServlet {
         }
     }
 
-    private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void logout(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
         session.removeAttribute("frontUserBean");
         String redirectUrl = req.getContextPath();

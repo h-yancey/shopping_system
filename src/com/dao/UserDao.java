@@ -15,9 +15,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- */
 public class UserDao {
     private String getSearchSql(Map<String, String> paramMap) {
         if (paramMap == null) {
@@ -84,7 +81,10 @@ public class UserDao {
         return userCount.intValue();
     }
 
-    public UserBean getUser(int userid) throws SQLException {
+    /**
+     * 根据用户编号userid查找
+     */
+    public UserBean getUserById(int userid) throws SQLException {
         String sql = "SELECT * FROM t_user WHERE userid = ?";
         UserBean userBean = null;
         Connection conn = JdbcUtil.getConnection();
@@ -100,7 +100,10 @@ public class UserDao {
         return userBean;
     }
 
-    public UserBean getUser(String username, String pwd) throws SQLException {
+    /**
+     * 根据账号密码查找
+     */
+    public UserBean getUserByUP(String username, String pwd) throws SQLException {
         String sql = "SELECT * FROM t_user WHERE username = ? AND pwd = ?";
         UserBean userBean = null;
         Connection conn = JdbcUtil.getConnection();
@@ -117,6 +120,9 @@ public class UserDao {
         return userBean;
     }
 
+    /**
+     * 修改冻结状态
+     */
     public void updateLock(int userid, String lockTag) throws SQLException {
         String sql = "UPDATE t_user SET lockTag = ? WHERE userid = ?";
         Connection conn = JdbcUtil.getConnection();
@@ -213,7 +219,7 @@ public class UserDao {
         }
     }
 
-    public void deleteUser(int userid) throws SQLException {
+    public void deleteUserById(int userid) throws SQLException {
         String sql = "DELETE FROM t_user WHERE userid = ?";
         Connection conn = JdbcUtil.getConnection();
         QueryRunner runner = new QueryRunner();
@@ -227,7 +233,7 @@ public class UserDao {
         }
     }
 
-    public void updateUser(int userid, UserBean userBean) throws SQLException {
+    public void updateUser(UserBean userBean) throws SQLException {
         String sql = "UPDATE t_user SET truename=?,sex=?,birth=?,email=?,phone=?,address=?,postcode=? WHERE userid=?";
         Connection conn = JdbcUtil.getConnection();
         QueryRunner runner = new QueryRunner();
@@ -238,6 +244,7 @@ public class UserDao {
         String phone = userBean.getPhone();
         String address = userBean.getAddress();
         String postcode = userBean.getPostcode();
+        int userid = userBean.getUserid();
         Object[] params = {truename, sex, brith, email, phone, address, postcode, userid};
         try {
             runner.update(conn, sql, params);
@@ -249,6 +256,9 @@ public class UserDao {
         }
     }
 
+    /**
+     * 修改密码
+     */
     public void updatePwd(int userid, String pwd) throws SQLException {
         String sql = "UPDATE t_user SET pwd = ? WHERE userid = ?";
         Connection conn = JdbcUtil.getConnection();
@@ -264,6 +274,9 @@ public class UserDao {
         }
     }
 
+    /**
+     * 修改登录参数，包括最后登录时间lastDate、登录次数loginNum
+     */
     public void updateLoginParams(int userid, Date lastDate, int loginNum) throws SQLException {
         String sql = "UPDATE t_user SET lastDate = ?, loginNum = ? WHERE userid = ?";
         Connection conn = JdbcUtil.getConnection();

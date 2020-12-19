@@ -18,9 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- */
+
 @WebServlet(urlPatterns = "/index")
 public class IndexServlet extends HttpServlet {
     private ItemService itemService = new ItemService();
@@ -86,8 +84,8 @@ public class IndexServlet extends HttpServlet {
         String itemId = req.getParameter("itemId");
         try {
             ItemBean itemBean = itemService.getItem(Integer.parseInt(itemId));
-            TypeBean bigTypeBean = typeService.getTypeById(itemBean.getBigTypeId());
-            TypeBean smallTypeBean = typeService.getTypeById(itemBean.getSmallTypeId());
+            TypeBean bigTypeBean = typeService.getType(itemBean.getBigTypeId());
+            TypeBean smallTypeBean = typeService.getType(itemBean.getSmallTypeId());
             itemBean.setBigTypeName(bigTypeBean.getTypeName());
             itemBean.setSmallTypeName(smallTypeBean.getTypeName());
 

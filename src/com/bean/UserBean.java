@@ -2,9 +2,6 @@ package com.bean;
 
 import java.util.Date;
 
-/**
- *
- */
 public class UserBean {
     private int userid;//用户Id
     private String username;//用户名
@@ -23,7 +20,6 @@ public class UserBean {
     private int loginNum;//登录次数
 
     public UserBean() {
-
     }
 
     public int getUserid() {

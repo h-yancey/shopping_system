@@ -20,6 +20,9 @@ import java.util.Map;
 public class ItemDao {
     private TypeDao typeDao = new TypeDao();
 
+    /**
+     * 拼接sql语句的查询条件参数
+     */
     private String getSearchSql(Map<String, String> paramMap) {
         StringBuffer searchSql = new StringBuffer();
         String itemTypeId = paramMap.get("itemTypeId");
@@ -29,9 +32,10 @@ public class ItemDao {
 
         if (!GlobalUtil.isEmpty(itemTypeId)) {
             try {
-                TypeBean typeBean = typeDao.getTypeById(Integer.parseInt(itemTypeId));
+                TypeBean typeBean = typeDao.getType(Integer.parseInt(itemTypeId));
                 if (typeBean != null) {
                     int parentId = typeBean.getParentId();
+                    //判断按大类还是小类查找
                     if (parentId == 0) {
                         //查找的是大类
                         searchSql.append(" and bigTypeId = " + itemTypeId);
@@ -45,6 +49,7 @@ public class ItemDao {
             }
         }
         if (!GlobalUtil.isEmpty(keyword)) {
+            //关键字用于商品名称或商品描述的模糊查询
             searchSql.append(" and (itemName like '%" + keyword + "%'");
             searchSql.append(" or itemDesc like '%" + keyword + "%')");
         }
@@ -144,7 +149,7 @@ public class ItemDao {
         }
     }
 
-    public void deleteItem(int itemId) throws SQLException {
+    public void deleteItemById(int itemId) throws SQLException {
         String sql = "DELETE FROM t_mc WHERE itemId = ?";
         Connection conn = JdbcUtil.getConnection();
         QueryRunner runner = new QueryRunner();
@@ -174,13 +179,10 @@ public class ItemDao {
         return itemBean;
     }
 
-    public void updateItem(int itemId, ItemBean itemBean) throws SQLException {
-        String sql =
-                "UPDATE t_mc SET itemId = ?, itemName = ?, itemDesc = ?, itemPrice = ?, imgName = ?, shortageTag = ?, addDate = ?, bigTypeId " +
-                        "=" + " ?, smallTypeId = " + "? WHERE itemId = ?";
+    public void updateItem(ItemBean itemBean) throws SQLException {
+        String sql = "UPDATE t_mc SET itemName = ?, itemDesc = ?, itemPrice = ?, imgName = ?, shortageTag = ?, addDate = ?, bigTypeId =  ?, smallTypeId = ? WHERE itemId = ?";
         Connection conn = JdbcUtil.getConnection();
         QueryRunner runner = new QueryRunner();
-        int itemIdNew = itemBean.getItemId();
         String itemName = itemBean.getItemName();
         String itemDesc = itemBean.getItemDesc();
         BigDecimal itemPrice = itemBean.getItemPrice();
@@ -189,7 +191,8 @@ public class ItemDao {
         Date addDate = itemBean.getAddDate();
         int bigTypeId = itemBean.getBigTypeId();
         int smallTypeId = itemBean.getSmallTypeId();
-        Object[] params = {itemId, itemName, itemDesc, itemPrice, imgName, shortageTag, addDate, bigTypeId, smallTypeId, itemIdNew};
+        int itemId = itemBean.getItemId();
+        Object[] params = {itemName, itemDesc, itemPrice, imgName, shortageTag, addDate, bigTypeId, smallTypeId, itemId};
         try {
             runner.update(conn, sql, params);
         } catch (SQLException e) {

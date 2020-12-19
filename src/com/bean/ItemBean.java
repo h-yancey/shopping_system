@@ -2,11 +2,7 @@ package com.bean;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Objects;
 
-/**
- *
- */
 public class ItemBean {
     private int itemId;//商品编号
     private String itemName;//商品名称
@@ -15,13 +11,12 @@ public class ItemBean {
     private String imgName;//商品图片的名称
     private String shortageTag;//是否缺贷
     private Date addDate;//添加时间
-    private int bigTypeId;//所属大类
-    private int smallTypeId;//所属小类
-    private String bigTypeName;
-    private String smallTypeName;
+    private int bigTypeId;//所属大类编号
+    private int smallTypeId;//所属小类编号
+    private String bigTypeName;//所属大类名称
+    private String smallTypeName;//所属小类名称
 
     public ItemBean() {
-
     }
 
     public int getItemId() {

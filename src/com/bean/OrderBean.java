@@ -3,9 +3,6 @@ package com.bean;
 import java.math.BigDecimal;
 import java.util.Date;
 
-/**
- *
- */
 public class OrderBean {
     private int orderId;//订单编号
     private String orderUser;//订单用户名
@@ -26,7 +23,6 @@ public class OrderBean {
     private String email;//收贷人email
 
     public OrderBean() {
-
     }
 
     public int getOrderId() {

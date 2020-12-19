@@ -19,9 +19,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.*;
 
-/**
- *
- */
+
 @WebServlet(urlPatterns = "/order")
 public class OrderServlet extends HttpServlet {
     private OrderService orderService = new OrderService();

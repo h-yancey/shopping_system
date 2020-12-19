@@ -75,7 +75,11 @@
                         </tr>
                         <tr>
                             <td>审核状态</td>
-                            <td>${orderBean.auditStatus}</td>
+                            <td>
+                                ${orderBean.auditStatus == "1"?"未审核":""}
+                                ${orderBean.auditStatus == "2"?"通过":""}
+                                ${orderBean.auditStatus == "3"?"不通过":""}
+                            </td>
                         </tr>
                         <tr>
                             <td>审核人</td>

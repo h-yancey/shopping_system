@@ -1,11 +1,7 @@
 package com.bean;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
-/**
- *
- */
 public class OrderItemBean {
     private int id;//编号
     private int orderId;//所属订单
@@ -18,7 +14,6 @@ public class OrderItemBean {
     private BigDecimal totalPrice;//小计
 
     public OrderItemBean() {
-
     }
 
     public int getId() {

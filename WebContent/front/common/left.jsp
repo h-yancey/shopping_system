@@ -78,7 +78,7 @@
         }
 
         .cart-dl dt {
-            font-size: 28px;
+            font-size: 23px;
             font-weight: bold;
             line-height: 50px;
             color: #009688;

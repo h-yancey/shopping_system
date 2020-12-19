@@ -14,9 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-/**
- *
- */
+
 @WebServlet(urlPatterns = "/servlet/LoginServlet")
 public class LoginServlet extends HttpServlet {
     private UserService userService = new UserService();
@@ -47,6 +45,7 @@ public class LoginServlet extends HttpServlet {
             UserBean userBean = userService.getLoginAdmin(username, pwd);
             HttpSession session = req.getSession();
             session.setAttribute("userBean", userBean);
+            //更新最后登录时间和登录次数
             userService.updateLoginParams(userBean);
             responseInfo.setFlag(true);
         } catch (Exception e) {

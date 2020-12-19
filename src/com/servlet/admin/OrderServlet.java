@@ -21,9 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- */
+
 @WebServlet(urlPatterns = "/servlet/OrderServlet")
 public class OrderServlet extends HttpServlet {
     private OrderService orderService = new OrderService();
@@ -53,13 +51,14 @@ public class OrderServlet extends HttpServlet {
     }
 
     private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //查询参数
+        //获取查询参数
         String startDate = req.getParameter("startDate");
         String endDate = req.getParameter("endDate");
         String orderUser = req.getParameter("orderUser");
         String itemName = req.getParameter("itemName");
         String auditStatus = req.getParameter("auditStatus");
 
+        //封装查询参数
         Map<String, String> paramMap = new HashMap<>();
         paramMap.put("startDate", startDate);
         paramMap.put("endDate", endDate);
@@ -72,13 +71,12 @@ public class OrderServlet extends HttpServlet {
         PageUtil pageUtil = new PageUtil(req);
         pageUtil.setPageSize(5);
         pageUtil.setRsCount(orderService.getOrderCount(paramMap));
-
         int pageSize = pageUtil.getPageSize();
         int currentPage = pageUtil.getCurrentPage();
         int rsCount = pageUtil.getRsCount();
         int pageCount = pageUtil.getPageCount();
-
         int beginIndex = (currentPage - 1) * pageSize;
+
         List<OrderBean> orderList = orderService.getOrderList(beginIndex, pageSize, paramMap);
         req.setAttribute("orderList", orderList);
 

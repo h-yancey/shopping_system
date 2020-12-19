@@ -17,9 +17,6 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.*;
 
-/**
- *
- */
 @WebServlet(urlPatterns = "/cart")
 public class CartServlet extends HttpServlet {
     private ItemService itemService = new ItemService();
