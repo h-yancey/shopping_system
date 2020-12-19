@@ -35,7 +35,7 @@
                             <div style="text-align: center"><h2>结账</h2></div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label"> 付款方式 </label>
+                            <label class="layui-form-label">付款方式</label>
                             <div class="layui-input-inline">
                                 <select name="payType">
                                     <option value="在线支付">在线支付</option>
@@ -45,7 +45,7 @@
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label"> 收货方式 </label>
+                            <label class="layui-form-label">收货方式</label>
                             <div class="layui-input-inline">
                                 <select name="sendType">
                                     <option value="快递">快递</option>

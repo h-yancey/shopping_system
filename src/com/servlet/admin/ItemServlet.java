@@ -131,11 +131,13 @@ public class ItemServlet extends HttpServlet {
                         OutputStream outputStream = new FileOutputStream(uploadDir + "/" + imgName);
                         int result = IOUtils.copy(inputStream, outputStream);
 
-                        //test
+                        //下面一段代码是测试用的，将文件上传到工程目录下（以绝对路径的形式）
+                        //这么做是为了让工程重新部署时，原先上传到部署路径下的图片能够保留
                         inputStream = new FileInputStream(uploadDir + "/" + imgName);
                         String path = "E:\\shopping_system\\WebContent\\upload\\" + imgName;
                         OutputStream outputStream1 = new FileOutputStream(path);
                         IOUtils.copy(inputStream, outputStream1);
+                        //
 
                         dataMap.put("imgName", imgName);
                         IOUtils.closeQuietly(inputStream);
@@ -219,10 +221,8 @@ public class ItemServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             resp.setContentType("text/html");
-            //String redirectUrl = req.getContextPath() + "/servlet/ItemServlet?task=list";
             out.print("<script>");
             out.print("alert('" + e.getMessage() + "');");
-            // out.print("window.location.href='" + redirectUrl + "'");
             out.print("</script>");
         } finally {
             out.flush();
@@ -263,11 +263,12 @@ public class ItemServlet extends HttpServlet {
                         String path = "E:\\shopping_system\\WebContent\\upload\\" + imgName;
                         OutputStream outputStream1 = new FileOutputStream(path);
                         IOUtils.copy(inputStream, outputStream1);
+                        IOUtils.closeQuietly(outputStream1);
+                        //
 
                         dataMap.put("imgName", imgName);
                         IOUtils.closeQuietly(inputStream);
                         IOUtils.closeQuietly(outputStream);
-                        IOUtils.closeQuietly(outputStream1);
                     }
                 }
             }
@@ -284,12 +285,11 @@ public class ItemServlet extends HttpServlet {
                 File imgFIle = new File(imgPath);
                 imgFIle.delete();
 
-                //TEST
+                //测试用的，和上述上传图片到工程目录一样，要删掉工程目录下的图片
                 String testPath = "E:\\shopping_system\\WebContent\\upload\\" + oldImgName;
                 imgFIle = new File(testPath);
                 imgFIle.delete();
             }
-
 
             ItemBean itemBean = new ItemBean();
             dataMap.put("addDate", GlobalUtil.parseDateTime((String) dataMap.get("addDate")));

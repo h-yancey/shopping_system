@@ -263,7 +263,7 @@
                 <label class="layui-form-label"><span class="x-red">*</span>添加时间</label>
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input Wdate" name="addDate" id="addDate"
-                           value="<fmt:formatDate value='${currentDatetime}' pattern="" "
+                           value="${currentDatetime}"
                            onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss',firstDayOfWeek: 1})">
                 </div>
                 <div class="layui-form-mid layui-word-aux">

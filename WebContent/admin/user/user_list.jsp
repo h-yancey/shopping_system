@@ -40,13 +40,11 @@
                         var flag = jsonData.flag;
                         var message = jsonData.message;
                         if (flag) {
-                            layer.msg('已解冻!', {icon: 1, time: 700}, function () {
+                            layer.msg('已解冻!', {icon: 1, time: 1000}, function () {
                                 location.reload();
                             });
                         } else {
-                            layer.alert("解冻失败，原因：" + message, {
-                                icon: 2
-                            });
+                            layer.alert("解冻失败，原因：" + message, {icon: 2});
                         }
                     }, "json")
 

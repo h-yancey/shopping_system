@@ -22,8 +22,7 @@
     <![endif]-->
 
     <script>
-        layui.use('form', function () {
-        });
+        layui.use('form');
 
         function isAlphaNum(value) {
             if (!value.match('^[0-9a-zA-Z]*$')) {
