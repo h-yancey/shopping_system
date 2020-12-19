@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html class="x-admin-sm">
 <head>
@@ -261,7 +262,8 @@
             <div class="layui-form-item">
                 <label class="layui-form-label"><span class="x-red">*</span>添加时间</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input Wdate" name="addDate" id="addDate" value="${currentDatetime}"
+                    <input type="text" class="layui-input Wdate" name="addDate" id="addDate"
+                           value="<fmt:formatDate value='${currentDatetime}' pattern="" "
                            onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss',firstDayOfWeek: 1})">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
