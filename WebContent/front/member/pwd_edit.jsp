@@ -90,26 +90,7 @@
             color: red;
         }
 
-        dl.member-dl {
-            text-align: left;
-            padding-left: 80px;
-        }
 
-        .member-dl dt {
-            font-size: 28px;
-            font-weight: bold;
-            line-height: 50px;
-            color: #FFB800;
-        }
-
-        .member-dl dd {
-            font-size: 13px;
-            line-height: 25px;
-        }
-
-        .member-dl a:hover {
-            color: #FFB800;
-        }
     </style>
 </head>
 <body>
@@ -120,20 +101,7 @@
         <div class="layui-card-body">
             <div class="layui-row">
                 <div class="layui-col-md2">
-                    <div class="layui-show">
-                        <dl class="member-dl">
-                            <dt>会员中心</dt>
-                            <dd>
-                                <a href="${contextPath}/member">基本资料</a>
-                            </dd>
-                            <dd>
-                                <a href="${contextPath}/member?task=editPwd">密码修改</a>
-                            </dd>
-                            <dd>
-                                <a href="${contextPath}/member?task=myOrder">我的订单</a>
-                            </dd>
-                        </dl>
-                    </div>
+                   <c:import url="./common/member_left.jsp"></c:import>
                 </div>
                 <div class="layui-col-md10" style="padding:10px;border: 1px solid #e6e6e6">
                     <h2>密码修改</h2>

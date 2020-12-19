@@ -89,11 +89,11 @@
     </style>
 </head>
 <body>
-<div class="layui-row">
-    <a class="layui-btn-small" style="line-height:1.6em;margin-right:15px;float:right" onclick="location.reload()" title="刷新">
-        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
-    </a>
-</div>
+<%--<div class="layui-row">--%>
+<%--    <a class="layui-btn-small" style="line-height:1.6em;margin-right:15px;float:right" onclick="location.reload()" title="刷新">--%>
+<%--        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>--%>
+<%--    </a>--%>
+<%--</div>--%>
 <div class="layui-fluid">
     <div class="layui-row">
         <form class="layui-form" id="save_form" autocomplete="off">
@@ -102,8 +102,8 @@
                     <span class="x-red">*</span>类别编号
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" name="typeId" value="${empty typeBean?'':typeBean.typeId}" class="layui-input" disabled/>
-                    <input type="hidden" name="typeId" value="${empty typeBean?'':typeBean.typeId}"/>
+                    <input type="text" name="typeId" value="${typeBean.typeId}" class="layui-input" disabled/>
+                    <input type="hidden" name="typeId" value="${typeBean.typeId}"/>
                 </div>
             </div>
 
@@ -112,7 +112,7 @@
                     <span class="x-red">*</span>类别名称
                 </label>
                 <div class="layui-input-inline">
-                    <input type="text" name="typeName" id="typeName" value="${empty typeBean?'':typeBean.typeName}" class="layui-input"/>
+                    <input type="text" name="typeName" id="typeName" value="${typeBean.typeName}" class="layui-input"/>
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <label for="typeName" class="error"></label>
@@ -124,9 +124,12 @@
                     <span class="x-red">*</span>上级分类
                 </label>
                 <div class="layui-input-inline">
+                    <c:if test="${typeBean.parentId == 0}">
+                        <input type="hidden" name="parentId" value="0">
+                    </c:if>
                     <select name="parentId" ${typeBean.parentId == 0?'disabled':''}>
                         <option value="0">无</option>
-                        <c:forEach items="${empty typeBean?'':parentTypeList}" var="bean">
+                        <c:forEach items="${parentTypeList}" var="bean">
                             <option value="${bean.typeId}" ${typeBean.parentId == bean.typeId?'selected': ''}>${bean.typeName}</option>
                         </c:forEach>
                     </select>

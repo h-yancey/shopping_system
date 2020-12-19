@@ -57,9 +57,11 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label"></label>
                             <a href="${contextPath}/cart" class="layui-btn layui-btn-normal">
-                                <i class="layui-icon layui-icon-return"></i>返回购物车
+                                <i class="layui-icon layui-icon-left"></i>返回购物车
                             </a>
-                            <button type="submit" class="layui-btn layui-btn-warm">确认结算</button>
+                            <button type="submit" class="layui-btn layui-btn-warm">
+                                确认结算<i class="layui-icon layui-icon-right"></i>
+                            </button>
                         </div>
                     </form>
                 </div>

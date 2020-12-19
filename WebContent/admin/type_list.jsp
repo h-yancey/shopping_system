@@ -120,11 +120,11 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body ">
-                    <div class="layui-input-inline layui-show-xs-block">
-                        <button class="layui-btn layui-btn-danger" onclick="delAll()">
-                            <i class="layui-icon"></i>批量删除
-                        </button>
-                    </div>
+<%--                    <div class="layui-input-inline layui-show-xs-block">--%>
+<%--                        <button class="layui-btn layui-btn-danger" onclick="delAll()">--%>
+<%--                            <i class="layui-icon"></i>批量删除--%>
+<%--                        </button>--%>
+<%--                    </div>--%>
                     <div class="layui-input-inline layui-show-xs-block" style="float:right">
                         <a class="layui-btn" onclick="xadmin.open('增加分类','${contextPath}/servlet/TypeServlet?task=add')">
                             <i class="layui-icon"></i>增加分类
@@ -151,7 +151,7 @@
 
                         <c:forEach items="${requestScope.typeList}" var="typeBean">
                             <tr cate-id='${typeBean.typeId}' fid='${typeBean.parentId}'>
-                            <td><input type="checkbox" name="" lay-skin="primary"></td>
+<%--                            <td><input type="checkbox" name="" lay-skin="primary"></td>--%>
                             <td>${typeBean.typeId}</td>
                             <td>
                                 <i class="layui-icon x-show" status='true'>&#xe623;</i>${typeBean.typeName}
@@ -178,9 +178,9 @@
 
                             <c:forEach items="${typeBean.childTypeList}" var="childTypeBean">
                                 <tr cate-id='${childTypeBean.typeId}' fid='${childTypeBean.parentId}'>
-                                    <td>
-                                        <input type="checkbox" name="" lay-skin="primary">
-                                    </td>
+<%--                                    <td>--%>
+<%--                                        <input type="checkbox" name="" lay-skin="primary">--%>
+<%--                                    </td>--%>
                                     <td>${childTypeBean.typeId}</td>
                                     <td>
                                         &nbsp;&nbsp;&nbsp;&nbsp;

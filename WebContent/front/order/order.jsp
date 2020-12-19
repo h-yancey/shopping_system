@@ -215,7 +215,8 @@
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label"></label>
-                            <button type="button" class="layui-btn layui-btn-warm" id="order_btn">下订单</button>
+                            <button type="button" class="layui-btn layui-btn-warm" id="order_btn">
+                                <i class="layui-icon layui-icon-form"></i>下订单</button>
                             <button type="reset" class="layui-btn layui-btn-primary" id="reset_btn"> 重置</button>
                         </div>
                     </form>

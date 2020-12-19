@@ -76,8 +76,10 @@
         <div class="layui-card layui-col-space10">
             <div class="item-info-box">
                 <div class="layui-row">
-                    <div class="layui-col-md2">
-                        &nbsp;
+                    <div class="layui-col-md3">
+                        <a href="${contextPath}" class="layui-btn layui-btn-normal" style="width: 70px;float:left;margin-top: 10px;margin-left: 20px">
+                            <i class="layui-icon layui-icon-return"></i>返回
+                        </a>
                     </div>
                     <div class="layui-col-md4">
                         <div class="item-info-pic">
@@ -118,17 +120,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="layui-col-md2">
-                        <a href="${contextPath}" class="layui-btn layui-btn-warm" style="width: 70px;float:right" >
-                            <i class="layui-icon layui-icon-return"></i>返回
-                        </a>
+                    <div class="layui-col-md1">
+                        &nbsp;
                     </div>
                 </div>
                 <div class="layui-row">
                     <div class="layui-col-md12">
                         <div style="text-align: center;margin-top:30px">
                             <c:if test="${itemBean.shortageTag == '否'}">
-                                <a href="javascript:;" class="layui-btn layui-btn-danger layui-btn-lg"  onclick="addCartItem(${itemBean.itemId})" style="width: 150px">
+                                <a href="javascript:;" class="layui-btn layui-btn-warm layui-btn-lg" onclick="addCartItem(${itemBean.itemId})" style="width: 150px">
                                     <i class="layui-icon layui-icon-cart-simple"></i> 购 买
                                 </a>
                             </c:if>

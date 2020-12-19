@@ -128,14 +128,16 @@
                                 <td align="right">￥<fmt:formatNumber value="${orderItemBean.itemPrice}" pattern="#,###.00"></fmt:formatNumber></td>
                                 <td align="center">
                                     <div>
-                                        <a href="javascript:;" class="layui-btn layui-btn-xs" style="width: 30px;height: 30px" onclick="decCartItemCount(this,${orderItemBean.itemId})">
+                                        <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs" style="width: 30px;height: 30px"
+                                           onclick="decCartItemCount(this,${orderItemBean.itemId})">
                                             <i class="layui-icon">-</i>
                                         </a>
                                         <input type="text" class="layui-input layui-input-inline" style="text-align: center;height: 30px;width: 40px;padding: 0px"
                                                onblur="updateCartItemCount(this,${orderItemBean.itemId},${orderItemBean.itemCount})"
                                                onkeydown="keyDownEvent(event,this,${orderItemBean.itemId},${orderItemBean.itemCount})"
                                                value="${orderItemBean.itemCount}">
-                                        <a href="javascript:;" class="layui-btn layui-btn-xs" style="width: 30px;height: 30px" onclick="incCartItemCount(this,${orderItemBean.itemId})">
+                                        <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs" style="width: 30px;height: 30px"
+                                           onclick="incCartItemCount(this,${orderItemBean.itemId})">
                                             <i class="layui-icon">+</i>
                                         </a>
                                     </div>
@@ -159,13 +161,13 @@
                         <tr>
                             <td colspan="6" align="right">
                                 <a href="${contextPath}" class="layui-btn layui-btn-normal">
-                                    <i class="layui-icon layui-icon-return"></i>继续购物
+                                    <i class="layui-icon layui-icon-left"></i>继续购物
                                 </a>
                                 <a href="javascript:;" class="layui-btn layui-btn-danger" onclick="clearCart()">
                                     <i class="layui-icon layui-icon-delete"></i>清空购物车
                                 </a>
                                 <a href="${contextPath}/order" class="layui-btn layui-btn-warm">
-                                    结算并下订单<i class="layui-icon layui-icon-triangle-r"></i>
+                                    结算并下订单<i class="layui-icon layui-icon-right"></i>
                                 </a>
                             </td>
                         </tr>

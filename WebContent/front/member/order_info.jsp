@@ -28,147 +28,86 @@
 </head>
 <body>
 <div class="layui-fluid">
-    <div class="layui-row" style="height: 800px">
-        <div class="layui-col-md3">
-            <div class="layui-card" style="height: 100%">
-                <div class="layui-form">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            订单编号
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.orderId}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            订单用户名
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.orderUser}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            下单时间
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            <fmt:formatDate value="${orderBean.orderDate}" pattern="yyyy-MM-dd HH:mm:ss"></fmt:formatDate>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            付款方式
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.payType}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            发货方式
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.sendType}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            商品种类数
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.itemTypeSize}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            商品总个数
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.itemSize}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            订单总金额
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ￥${orderBean.totalPrice}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            审核状态
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.auditStatus == "1"?"未审核":""}
-                            ${orderBean.auditStatus == "2"?"通过":""}
-                            ${orderBean.auditStatus == "3"?"不通过":""}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            订单反馈
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.msg}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            收贷人
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.consignee}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            收贷人地址
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.address}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            收贷人邮编
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.postcode}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            收贷人电话
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.phone}
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            收贷人邮箱
-                        </label>
-                        <div class="layui-form-label" style="width: 150px;text-align: left">
-                            ${orderBean.email}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="layui-col-md9">
-            <div class="layui-card" style="height: 100%">
-                <div class="layui-card-body">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
                     <table class="layui-table">
                         <thead>
+                        <th colspan="2">订单基本信息</th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>订单号</td>
+                            <td>${orderBean.orderId}</td>
+                        </tr>
+                        <tr>
+                            <td>用户</td>
+                            <td>${orderBean.orderUser}</td>
+                        </tr>
+                        <tr>
+                            <td>收货人</td>
+                            <td>${orderBean.consignee}</td>
+                        </tr>
+                        <tr>
+                            <td>收货人地址</td>
+                            <td>${orderBean.address}</td>
+                        </tr>
+                        <tr>
+                            <td>收货人邮编</td>
+                            <td>${orderBean.postcode}</td>
+                        </tr>
+                        <tr>
+                            <td>收货人电话</td>
+                            <td>${orderBean.phone}</td>
+                        </tr>
+                        <tr>
+                            <td>收货人邮箱</td>
+                            <td>${orderBean.email}</td>
+                        </tr>
+                        <tr>
+                            <td>下单时间</td>
+                            <td><fmt:formatDate value="${orderBean.orderDate}" pattern="yyyy-MM-dd HH:mm:ss"></fmt:formatDate></td>
+                        </tr>
+                        <tr>
+                            <td>付款方式</td>
+                            <td>${orderBean.payType}</td>
+                        </tr>
+                        <tr>
+                            <td>发货方式</td>
+                            <td>${orderBean.sendType}</td>
+                        </tr>
+                        <tr>
+                            <td>审核状态</td>
+                            <td>${orderBean.auditStatus}</td>
+                        </tr>
+                        <tr>
+                            <td>审核人</td>
+                            <td>${orderBean.auditUser}</td>
+                        </tr>
+                        <tr>
+                            <td>审核时间</td>
+                            <td><fmt:formatDate value="${orderBean.auditDate}" pattern="yyyy-MM-dd HH:mm:ss"></fmt:formatDate></td>
+                        </tr>
+                        <tr>
+                            <td>不通过原因</td>
+                            <td>${orderBean.msg}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table class="layui-table">
+                        <thead>
+                        <tr>
+                            <th colspan="6">订单商品信息</th>
+                        </tr>
                         <tr>
                             <th style="text-align: center;width: 20%">商品名称</th>
                             <th style="text-align: center;width: 30%">商品描述</th>
                             <th style="text-align: center;width: 20%">商品图片</th>
                             <th style="text-align: center;width: 10%">商品数量</th>
                             <th style="text-align: center;width: 10%">商品单价</th>
-                            <th style="text-align: center;width: 10%">总计</th>
+                            <th style="text-align: center;width: 10%">小计</th>
+                        </tr>
                         </thead>
                         <tbody>
                         <c:forEach items="${orderItemList}" var="orderItemBean">
@@ -182,17 +121,24 @@
                             </tr>
                         </c:forEach>
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="6" align="right">
+                                商品种类数：${orderBean.itemTypeSize}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                商品总个数：${orderBean.itemSize}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                商品总金额：￥${orderBean.totalPrice}
+                            </td>
+                        </tr>
+                        </tfoot>
                     </table>
-                </div>
-                <div class="layui-card-body ">
                     <div class="page">
                         ${pageTool}
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
 </body>
 </html>
+>
