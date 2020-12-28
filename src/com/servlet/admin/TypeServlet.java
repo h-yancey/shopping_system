@@ -51,7 +51,7 @@ public class TypeServlet extends HttpServlet {
         List<TypeBean> typeList = typeService.getTypeList();
         req.setAttribute("typeList", typeList);
 
-        String forwardUrl = "/admin/type_list.jsp";
+        String forwardUrl = "/admin/type/type_list.jsp";
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 
@@ -62,7 +62,7 @@ public class TypeServlet extends HttpServlet {
         int maxTypeId = typeService.getMaxTypeId();
         req.setAttribute("maxTypeId", maxTypeId);
 
-        String forwardUrl = "/admin/type_add.jsp";
+        String forwardUrl = "/admin/type/type_add.jsp";
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 
@@ -129,7 +129,7 @@ public class TypeServlet extends HttpServlet {
             List<TypeBean> parentTypeList = typeService.getParentTypeList();
             req.setAttribute("parentTypeList", parentTypeList);
 
-            String forwardUrl = "/admin/type_edit.jsp";
+            String forwardUrl = "/admin/type/type_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();

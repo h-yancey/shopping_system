@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html class="x-admin-sm">
 <head>
     <meta charset="UTF-8">
-    <title>增加商品</title>
+    <title>修改商品</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
@@ -76,6 +75,7 @@
             return url;
         }
 
+
         jQuery(function () {
             jQuery.validator.addMethod("twoDecimalPlace", function (value, element) {
                 inputZ = value;
@@ -90,7 +90,7 @@
 
             jQuery.validator.addMethod("checkImg", function (value, element) {
                 return isImg(value);
-            }, "上传的文件必须是后缀为jpg、gif、bmp的图片");
+            }, "上传的文件必须为图片");
 
             var validator = $("#save_form").validate({
                 rules: {
@@ -101,14 +101,13 @@
                     },
                     itemName: {
                         required: true,
-                        //  rangelength: [3, 15],
+                        rangelength: [3, 15],
                     },
                     itemPrice: {
                         required: true,
                         number: true,
                         min: 0,
                         twoDecimalPlace: true,
-                        // $("input[name='itemPrice']").val()
                     },
                     smallTypeId: {
                         required: true
@@ -119,8 +118,7 @@
                     },
                     imgName: {
                         checkImg: true
-                    },
-                    itemDesc: "required",
+                    }
                 },
                 messages: {
                     itemId: {
@@ -130,7 +128,7 @@
                     },
                     itemName: {
                         required: "商品名称不能为空",
-                        // rangelength: "类别名称长度允许3-15个字符",
+                        rangelength: "商品名称长度允许3-15个字符",
 
                     },
                     itemPrice: {
@@ -143,14 +141,12 @@
                         required: "添加时间不能为空",
                         date: "请填写正确的日期格式"
                     }
-                    ,
-                    itemDesc: "商品描述不能为空",
                 }
             })
 
             $("#save_btn").click(function () {
                 if (validator.form()) {
-                    var saveUrl = "${contextPath}/servlet/ItemServlet?task=save";
+                    var saveUrl = "${contextPath}/servlet/ItemServlet?task=update";
                     $("#save_form").ajaxSubmit({
                         url: saveUrl,
                         type: "post",
@@ -160,12 +156,12 @@
                             var flag = jsonData.flag;
                             var message = jsonData.message;
                             if (flag) {
-                                layer.msg("增加成功", {icon: 1, time: 1000}, function () {
+                                layer.msg("修改成功", {icon: 1, time: 1000}, function () {
                                     // 可以对父窗口进行刷新
                                     xadmin.father_reload();
-                                });
+                                })
                             } else {
-                                layer.alert("添加失败，原因：" + message, {icon: 2});
+                                layer.alert("修改失败，原因：" + message, {icon: 2});
                             }
                         },
                         error: function () {
@@ -179,20 +175,24 @@
 
             $("#reset_btn").click(function () {
                 validator.resetForm();
-                $("#img_show").removeAttr("src").hide();
+                $("#img_show").attr("src", "${contextPath}/upload/${itemBean.imgName}").show();
+                $("#span_imgname").html("${itemBean.imgName}");
             });
 
             $("#imgName").change(function () {
                 var file = this.files[0];
                 if (!file) {
-                    $("#img_show").attr("src", "").hide();
+                    $("#img_show").attr("src", "${contextPath}/upload/${itemBean.imgName}").show();
+                    $("#span_imgname").html("${itemBean.imgName}");
                 } else {
                     var fileName = file.name;
                     var fileSrc = getObjectURL(file);
                     if (fileSrc && isImg(fileName)) {
                         $("#img_show").attr("src", fileSrc).show();
+                        $("#span_imgname").html(fileName);
                     } else {
                         $("#img_show").hide();
+                        $("#span_imgname").html("");
                     }
                 }
             })
@@ -217,16 +217,14 @@
             <div class="layui-form-item">
                 <label class="layui-form-label"> <span class="x-red">*</span>商品编号</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="itemId" id="itemId" class="layui-input" value="${maxItemId}">
-                </div>
-                <div class="layui-form-mid layui-word-aux">
-                    <label for="itemId" class="error"></label>
+                    <input type="text" name="itemId" class="layui-input" value="${itemBean.itemId}" disabled>
+                    <input type="hidden" name="itemId" class="layui-input" value="${itemBean.itemId}">
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"> <span class="x-red">*</span>商品名称</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="itemName" id="itemName" class="layui-input">
+                    <input type="text" name="itemName" id="itemName" class="layui-input" value="${itemBean.itemName}">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <label for="itemName" class="error"></label>
@@ -235,7 +233,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label"> <span class="x-red">*</span>商品价格</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="itemPrice" id="itemPrice" class="layui-input">
+                    <input type="text" name="itemPrice" id="itemPrice" class="layui-input" value="${itemBean.itemPrice}">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <label for="itemPrice" class="error"></label>
@@ -249,7 +247,7 @@
                         <c:forEach items="${typeList}" var="typeBean">
                             <optgroup label="${typeBean.typeName}">
                                 <c:forEach items="${typeBean.childTypeList}" var="childTypeBean">
-                                    <option value="${childTypeBean.typeId}">${childTypeBean.typeName}</option>
+                                    <option value="${childTypeBean.typeId}" ${itemBean.smallTypeId == childTypeBean.typeId?"selected":""}>${childTypeBean.typeName}</option>
                                 </c:forEach>
                             </optgroup>
                         </c:forEach>
@@ -262,8 +260,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label"><span class="x-red">*</span>添加时间</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input Wdate" name="addDate" id="addDate"
-                           value="${currentDatetime}"
+                    <input type="text" class="layui-input Wdate" name="addDate" id="addDate" value="${itemBean.addDate}"
                            onclick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd HH:mm:ss',firstDayOfWeek: 1})">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
@@ -271,21 +268,26 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label"><span class="x-red">*</span>商品图片</label>
+                <label class="layui-form-label">商品图片</label>
                 <div class="layui-input-inline">
                     <div style="width: 100px;height: 100px;background: white">
-                        <img id="img_show" style="display: none" width="100" height="100" onclick="showLargeImg(this.src)">
+                        <img src="${contextPath}/upload/${itemBean.imgName}" height="100" width="100" id="img_show" onclick="showLargeImg(this.src)">
                     </div>
+                    <input type="hidden" name="oldImgName" value="${itemBean.imgName}">
                     <input type="file" class="layui-input" name="imgName" id="imgName">
+                </div>
+                <div class="layui-form-mid">
+                    <span id="span_imgname" style="float: bottom;color: black">${itemBean.imgName}</span>
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <label for="imgName" class="error"></label>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label"><span class="x-red">*</span>商品描述</label>
+
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">商品描述</label>
                 <div class="layui-input-inline" style="width: 800px">
-                    <textarea placeholder="请输入内容" name="itemDesc" id="itemDesc" class="layui-textarea"></textarea>
+                    <textarea placeholder="请输入内容" name="itemDesc" id="itemDesc" class="layui-textarea">${itemBean.itemDesc}</textarea>
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <label for="itemDesc" class="error"></label>
@@ -295,14 +297,14 @@
                 <label class="layui-form-label"><span class="x-red">*</span>是否缺货</label>
                 <div class="layui-input-inline">
                     <select name="shortageTag">
-                        <option value="否">否</option>
-                        <option value="是">是</option>
+                        <option value="否" ${itemBean.shortageTag == "否"?"selected":""}>否</option>
+                        <option value="是" ${itemBean.shortageTag == "是"?"selected":""}>是</option>
                     </select>
                 </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
-                <button type="button" class="layui-btn" id="save_btn">保存商品</button>
+                <button type="button" class="layui-btn" id="save_btn">保存修改</button>
                 <button type="reset" class="layui-btn layui-btn-primary" id="reset_btn">重置</button>
             </div>
         </form>

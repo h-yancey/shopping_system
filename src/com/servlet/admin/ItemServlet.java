@@ -85,7 +85,7 @@ public class ItemServlet extends HttpServlet {
         List<TypeBean> typeList = typeService.getTypeList();
         req.setAttribute("typeList", typeList);
 
-        String forwardUrl = "/admin/item_list.jsp";
+        String forwardUrl = "/admin/item/item_list.jsp";
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 
@@ -99,7 +99,7 @@ public class ItemServlet extends HttpServlet {
         String currentDatetime = GlobalUtil.getCurrentDatetime();
         req.setAttribute("currentDatetime", currentDatetime);
 
-        String forwardUrl = "/admin/item_add.jsp";
+        String forwardUrl = "/admin/item/item_add.jsp";
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 
@@ -216,7 +216,7 @@ public class ItemServlet extends HttpServlet {
             List<TypeBean> typeList = typeService.getTypeList();
             req.setAttribute("typeList", typeList);
 
-            String forwardUrl = "/admin/item_edit.jsp";
+            String forwardUrl = "/admin/item/item_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();

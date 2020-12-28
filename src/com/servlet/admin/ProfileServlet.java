@@ -43,7 +43,7 @@ public class ProfileServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         try {
-            String forwardUrl = "/admin/profile_edit.jsp";
+            String forwardUrl = "/admin/profile/profile_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,7 +102,7 @@ public class ProfileServlet extends HttpServlet {
         PrintWriter out = resp.getWriter();
 
         try {
-            String forwardUrl = "/admin/pwd_edit.jsp";
+            String forwardUrl = "/admin/profile/pwd_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             e.printStackTrace();

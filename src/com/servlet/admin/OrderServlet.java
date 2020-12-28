@@ -83,7 +83,7 @@ public class OrderServlet extends HttpServlet {
         String pageTool = pageUtil.createPageTool(PageUtil.BbsText);
         req.setAttribute("pageTool", pageTool);
 
-        String forwardUrl = "/admin/order_list.jsp";
+        String forwardUrl = "/admin/order/order_list.jsp";
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 
@@ -94,7 +94,7 @@ public class OrderServlet extends HttpServlet {
             List<OrderItemBean> orderItemList = orderItemService.getOrderItemListByOrderId(orderBean.getOrderId());
             req.setAttribute("orderBean", orderBean);
             req.setAttribute("orderItemList", orderItemList);
-            String forwardUrl = "/admin/order_info.jsp";
+            String forwardUrl = "/admin/order/order_info.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             String redirectUrl = req.getContextPath() + "/admin/admin_index.jsp";
@@ -107,7 +107,7 @@ public class OrderServlet extends HttpServlet {
         try {
             OrderBean orderBean = orderService.getOrder(Integer.parseInt(orderId));
             req.setAttribute("orderBean", orderBean);
-            String forwardUrl = "/admin/order_audit.jsp";
+            String forwardUrl = "/admin/order/order_audit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             String redirectUrl = req.getContextPath() + "/admin/admin_index.jsp";
@@ -153,7 +153,7 @@ public class OrderServlet extends HttpServlet {
         try {
             OrderBean orderBean = orderService.getOrder(Integer.parseInt(orderId));
             req.setAttribute("orderBean", orderBean);
-            String forwardUrl = "/admin/order_edit.jsp";
+            String forwardUrl = "/admin/order/order_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
             String redirectUrl = req.getContextPath() + "/admin/admin_index.jsp";
