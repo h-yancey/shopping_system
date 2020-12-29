@@ -69,7 +69,7 @@ public class OrderServlet extends HttpServlet {
 
         //分页
         PageUtil pageUtil = new PageUtil(req);
-        pageUtil.setPageSize(5);
+        pageUtil.setPageSize(10);
         pageUtil.setRsCount(orderService.getOrderCount(paramMap));
         int pageSize = pageUtil.getPageSize();
         int currentPage = pageUtil.getCurrentPage();

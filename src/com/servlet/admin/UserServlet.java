@@ -75,7 +75,7 @@ public class UserServlet extends HttpServlet {
 
         //分页
         PageUtil pageUtil = new PageUtil(req);
-        pageUtil.setPageSize(5);
+        pageUtil.setPageSize(10);
         pageUtil.setRsCount(userService.getUserCount(paramMap));
         int pageSize = pageUtil.getPageSize();
         int currentPage = pageUtil.getCurrentPage();
@@ -109,7 +109,7 @@ public class UserServlet extends HttpServlet {
 
         //分页
         PageUtil pageUtil = new PageUtil(req);
-        pageUtil.setPageSize(5);
+        pageUtil.setPageSize(10);
         pageUtil.setRsCount(userService.getUserCount(paramMap));
         int pageSize = pageUtil.getPageSize();
         int currentPage = pageUtil.getCurrentPage();
