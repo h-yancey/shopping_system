@@ -51,6 +51,9 @@ public class ItemServlet extends HttpServlet {
         }
     }
 
+    /**
+     * @description 处理显示商品列表的请求
+     */
     private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         //查询参数
         String itemTypeId = req.getParameter("itemType");
@@ -76,33 +79,47 @@ public class ItemServlet extends HttpServlet {
         int pageCount = pageUtil.getPageCount();
         int beginIndex = (currentPage - 1) * pageSize;
 
+        //将商品列表放到reques作用域
         List<ItemBean> itemList = itemService.getItemList(beginIndex, pageSize, paramMap);
         req.setAttribute("itemList", itemList);
 
+        //将分页工具放到reques作用域
         String pageTool = pageUtil.createPageTool(PageUtil.BbsText);
         req.setAttribute("pageTool", pageTool);
 
+        //将商品类别列表放到reques作用域
         List<TypeBean> typeList = typeService.getTypeList();
         req.setAttribute("typeList", typeList);
 
+        //转发
         String forwardUrl = "/admin/item/item_list.jsp";
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 
+    /**
+     * @description 处理添加商品的请求，跳转到添加商品页面
+     */
     private void add(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        //商品类别下拉框需要动态获取
         List<TypeBean> typeList = typeService.getTypeList();
         req.setAttribute("typeList", typeList);
 
+        //自动生成商品编号
         int maxItemId = itemService.getMaxItemId();
         req.setAttribute("maxItemId", maxItemId);
 
+        //自动生成添加时间
         String currentDatetime = GlobalUtil.getCurrentDatetime();
         req.setAttribute("currentDatetime", currentDatetime);
 
+        //重定向到添加商品页面
         String forwardUrl = "/admin/item/item_add.jsp";
         req.getRequestDispatcher(forwardUrl).forward(req, resp);
     }
 
+    /**
+     * @description 处理保存商品的请求
+     */
     private void save(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         FileItemFactory fileItemFactory = new DiskFileItemFactory();
         ServletFileUpload fileUpload = new ServletFileUpload(fileItemFactory);
@@ -172,6 +189,9 @@ public class ItemServlet extends HttpServlet {
         }
     }
 
+    /**
+     * @description 处理删除商品的请求
+     */
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String itemId = req.getParameter("itemId");
         String imgName = req.getParameter("imgName");
@@ -205,6 +225,9 @@ public class ItemServlet extends HttpServlet {
         }
     }
 
+    /**
+     * @description 处理编辑商品的请求，跳转到编辑商品页面
+     */
     private void edit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
 
@@ -216,6 +239,7 @@ public class ItemServlet extends HttpServlet {
             List<TypeBean> typeList = typeService.getTypeList();
             req.setAttribute("typeList", typeList);
 
+            //重定向到添加商品页面
             String forwardUrl = "/admin/item/item_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
         } catch (Exception e) {
@@ -230,6 +254,9 @@ public class ItemServlet extends HttpServlet {
         }
     }
 
+    /**
+     * @description 处理修改商品的请求
+     */
     private void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         FileItemFactory fileItemFactory = new DiskFileItemFactory();
         ServletFileUpload fileUpload = new ServletFileUpload(fileItemFactory);

@@ -18,7 +18,9 @@ import java.util.Map;
 
 public class OrderItemDao {
     /**
-     * 拼接sql语句的查询条件参数
+     * @param paramMap 存放查询条件的一系列键值对
+     * @return where子句
+     * @description 拼接sql语句的查询条件参数
      */
     private String getSearchSql(Map<String, String> paramMap) {
         StringBuffer searchSql = new StringBuffer();
@@ -30,6 +32,11 @@ public class OrderItemDao {
         return searchSql.toString();
     }
 
+    /**
+     * @param paramMap 存放查询条件的一系列键值对
+     * @return 订单条目数
+     * @description 获取数据库中满足查询条件的订单条目的数量
+     */
     public int getOrderItemCount(Map<String, String> paramMap) {
         String searchSql = this.getSearchSql(paramMap);
         String sql = "SELECT IFNULL(COUNT(id),0) AS order_item_count FROM t_order_item";
@@ -50,6 +57,13 @@ public class OrderItemDao {
         return orderItemCount.intValue();
     }
 
+    /**
+     * @param beginIndex 开始的索引位
+     * @param pageSize   获取的个数
+     * @param paramMap   存放查询条件的一系列键值对
+     * @return 订单条目列表
+     * @description 从数据库中获取指定条件的订单条目
+     */
     public List<OrderItemBean> getOrderItemList(int beginIndex, int pageSize, Map<String, String> paramMap) {
         String searchSql = this.getSearchSql(paramMap);
         String sql = "SELECT * FROM t_order_item";
@@ -70,6 +84,11 @@ public class OrderItemDao {
         return orderItemList;
     }
 
+    /**
+     * @param orderId 订单编号
+     * @return 订单条目列表
+     * @description 获取指定订单编号的订单中的所有订单条目
+     */
     public List<OrderItemBean> getOrderItemListByOrderId(int orderId) {
         String sql = "SELECT * FROM t_order_item WHERE orderId = ?";
         List<OrderItemBean> orderItemList = null;
@@ -85,6 +104,10 @@ public class OrderItemDao {
         return orderItemList;
     }
 
+    /**
+     * @return 最大id加1后的值
+     * @description 获取数据库中最大id加1后的值
+     */
     public int getMaxId() {
         String sql = "SELECT IFNULL(MAX(id),0)+1 AS max_id FROM t_order_item";
         Long maxId = null;
@@ -100,6 +123,10 @@ public class OrderItemDao {
         return maxId.intValue();
     }
 
+    /**
+     * @param orderItemBean 订单条目对象
+     * @description 将订单条目保存到数据库
+     */
     public void saveOrderItem(OrderItemBean orderItemBean) throws SQLException {
         int id = orderItemBean.getId();
         int orderId = orderItemBean.getOrderId();

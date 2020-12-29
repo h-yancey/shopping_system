@@ -104,7 +104,7 @@ public class TypeServlet extends HttpServlet {
         Gson gson = new Gson();
         try {
             typeService.deleteType(Integer.parseInt(typeId), Integer.parseInt(parentId));
-            //删除该类别所有的商品
+            //删除该类别下的所有商品
             itemService.deleteItemsByTypeId(Integer.parseInt(typeId));
             responseInfo.setFlag(true);
         } catch (Exception e) {

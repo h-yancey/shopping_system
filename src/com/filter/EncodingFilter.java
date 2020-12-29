@@ -15,7 +15,6 @@ public class EncodingFilter implements Filter {
     	
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		//response.setContentType("text/html");
         
         String contextPath = request.getContextPath();
         request.setAttribute("contextPath" , contextPath);

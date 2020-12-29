@@ -38,10 +38,21 @@ public class ProfileServlet extends HttpServlet {
             updatePwd(req, resp);
         }
     }
+    /**
+     * @description 重新设置登录的用户
+     * @param req
+     * @param userid 用户编号
+     * @return
+     */
+    private void refreshLoginUser(HttpServletRequest req, int userid) throws Exception {
+        HttpSession session = req.getSession();
+        UserBean userBean = userService.getUserById(userid);
+        session.setAttribute("userBean", userBean);
+    }
+
 
     private void editProfile(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
-
         try {
             String forwardUrl = "/admin/profile/profile_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
@@ -85,6 +96,7 @@ public class ProfileServlet extends HttpServlet {
         Gson gson = new Gson();
         try {
             userService.updateUser(userBean);
+            refreshLoginUser(req, userid);
             responseInfo.setFlag(true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,7 +112,6 @@ public class ProfileServlet extends HttpServlet {
 
     private void editPwd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
-
         try {
             String forwardUrl = "/admin/profile/pwd_edit.jsp";
             req.getRequestDispatcher(forwardUrl).forward(req, resp);
@@ -129,6 +140,7 @@ public class ProfileServlet extends HttpServlet {
         Gson gson = new Gson();
         try {
             userService.updatePwd(userid, oldPwd, newPwd);
+            refreshLoginUser(req, userid);
             responseInfo.setFlag(true);
         } catch (Exception e) {
             responseInfo.setFlag(false);

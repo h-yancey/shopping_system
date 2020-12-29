@@ -16,15 +16,20 @@ import java.util.List;
 import java.util.Map;
 
 public class UserDao {
+    /**
+     * @param paramMap 存放查询条件的一系列键值对
+     * @return where子句
+     * @description 拼接sql语句的查询条件参数
+     */
     private String getSearchSql(Map<String, String> paramMap) {
         if (paramMap == null) {
             return null;
         }
         StringBuffer searchSql = new StringBuffer();
-        String authLevel = paramMap.get("authLevel");
-        String username = paramMap.get("username");
-        String sex = paramMap.get("sex");
-        String lockTag = paramMap.get("lockTag");
+        String authLevel = paramMap.get("authLevel");//权限级别
+        String username = paramMap.get("username");//用户名
+        String sex = paramMap.get("sex");//性别
+        String lockTag = paramMap.get("lockTag");//冻结状态
 
         if (!GlobalUtil.isEmpty(authLevel)) {
             searchSql.append(" and authLevel = " + authLevel);
@@ -41,26 +46,11 @@ public class UserDao {
         return searchSql.toString();
     }
 
-    public List<UserBean> getUserList(int beginIndex, int pageSize, Map<String, String> paramMap) {
-        String searchSql = this.getSearchSql(paramMap);
-        String sql = "SELECT * FROM t_user";
-        if (searchSql != null && searchSql.length() > 0) {
-            sql = sql + " WHERE 1=1 " + searchSql;
-        }
-        sql += " ORDER BY userid ASC LIMIT " + beginIndex + "," + pageSize;
-        List<UserBean> userList = null;
-        Connection conn = JdbcUtil.getConnection();
-        QueryRunner runner = new QueryRunner();
-        try {
-            userList = runner.query(conn, sql, new BeanListHandler<>(UserBean.class));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            DbUtils.closeQuietly(conn);
-        }
-        return userList;
-    }
-
+    /**
+     * @param paramMap 存放查询条件的一系列键值对
+     * @return 用户数
+     * @description 获取数据库中满足查询条件的用户的数量
+     */
     public int getUserCount(Map<String, String> paramMap) {
         String searchSql = this.getSearchSql(paramMap);
         String sql = "SELECT IFNULL(COUNT(userid),0) AS user_count FROM t_user";
@@ -82,7 +72,36 @@ public class UserDao {
     }
 
     /**
-     * 根据用户编号userid查找
+     * @param beginIndex 开始的索引位
+     * @param pageSize   获取的个数
+     * @param paramMap   存放查询条件的一系列键值对
+     * @return 用户列表
+     * @description 从数据库中获取指定条件的用户
+     */
+    public List<UserBean> getUserList(int beginIndex, int pageSize, Map<String, String> paramMap) {
+        String searchSql = this.getSearchSql(paramMap);
+        String sql = "SELECT * FROM t_user";
+        if (searchSql != null && searchSql.length() > 0) {
+            sql = sql + " WHERE 1=1 " + searchSql;
+        }
+        sql += " ORDER BY userid ASC LIMIT " + beginIndex + "," + pageSize;
+        List<UserBean> userList = null;
+        Connection conn = JdbcUtil.getConnection();
+        QueryRunner runner = new QueryRunner();
+        try {
+            userList = runner.query(conn, sql, new BeanListHandler<>(UserBean.class));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+        return userList;
+    }
+
+    /**
+     * @param userid 用户编号
+     * @return 存在返回一个用户对象，不存在返回null
+     * @description 通过用户编号从数据库中获取用户
      */
     public UserBean getUserById(int userid) throws SQLException {
         String sql = "SELECT * FROM t_user WHERE userid = ?";
@@ -101,7 +120,10 @@ public class UserDao {
     }
 
     /**
-     * 根据账号密码查找
+     * @param username 用户名
+     * @param pwd      密码
+     * @return 存在返回一个用户对象，不存在返回null
+     * @description 通过用户名和密码从数据库中获取用户
      */
     public UserBean getUserByUP(String username, String pwd) throws SQLException {
         String sql = "SELECT * FROM t_user WHERE username = ? AND pwd = ?";
@@ -121,22 +143,9 @@ public class UserDao {
     }
 
     /**
-     * 修改冻结状态
+     * @return 最大userid加1后的值
+     * @description 获取数据库中最大userid加1后的值
      */
-    public void updateLock(int userid, String lockTag) throws SQLException {
-        String sql = "UPDATE t_user SET lockTag = ? WHERE userid = ?";
-        Connection conn = JdbcUtil.getConnection();
-        QueryRunner runner = new QueryRunner();
-        try {
-            runner.update(conn, sql, lockTag, userid);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            DbUtils.closeQuietly(conn);
-        }
-    }
-
     public int getMaxUserid() {
         String sql = "SELECT IFNULL(MAX(userid),0)+1 AS max_userid FROM t_user";
         Long maxUserid = null;
@@ -152,6 +161,11 @@ public class UserDao {
         return maxUserid.intValue();
     }
 
+    /**
+     * @param userid 用户编号
+     * @return 存放返回true, 不存在返回false
+     * @description 判断用户编号是否在数据库中已存在
+     */
     public boolean isExistUserid(int userid) {
         String sql = "SELECT IFNULL(COUNT(userid),0) AS is_exist_userid FROM t_user WHERE userid = ?";
         Long cntUserid = null;
@@ -170,6 +184,11 @@ public class UserDao {
         return false;
     }
 
+    /**
+     * @param username 用户名
+     * @return 存放返回true, 不存在返回false
+     * @description 判断用户名是否在数据库中已存在
+     */
     public boolean isExistUsername(String username) {
         String sql = "SELECT IFNULL(COUNT(username),0) AS is_exist_username FROM t_user WHERE username = ?";
         Long cntUsername = null;
@@ -188,6 +207,10 @@ public class UserDao {
         return false;
     }
 
+    /**
+     * @param userBean 用户对象
+     * @description 将用户保存到数据库
+     */
     public void saveUser(UserBean userBean) throws SQLException {
         int userid = userBean.getUserid();
         String username = userBean.getUsername();
@@ -219,6 +242,10 @@ public class UserDao {
         }
     }
 
+    /**
+     * @param userid 用户编号
+     * @description 通过用户编号从数据库中删除用户
+     */
     public void deleteUserById(int userid) throws SQLException {
         String sql = "DELETE FROM t_user WHERE userid = ?";
         Connection conn = JdbcUtil.getConnection();
@@ -233,6 +260,10 @@ public class UserDao {
         }
     }
 
+    /**
+     * @param userBean 用户对象
+     * @description 更新用户（只改变基本信息的字段，即用户名、性别、出生日期、邮箱、电话、地址、邮编）
+     */
     public void updateUser(UserBean userBean) throws SQLException {
         String sql = "UPDATE t_user SET truename=?,sex=?,birth=?,email=?,phone=?,address=?,postcode=? WHERE userid=?";
         Connection conn = JdbcUtil.getConnection();
@@ -257,7 +288,9 @@ public class UserDao {
     }
 
     /**
-     * 修改密码
+     * @param userid 用户编号
+     * @param pwd    新密码
+     * @description 修改密码
      */
     public void updatePwd(int userid, String pwd) throws SQLException {
         String sql = "UPDATE t_user SET pwd = ? WHERE userid = ?";
@@ -275,7 +308,29 @@ public class UserDao {
     }
 
     /**
-     * 修改登录参数，包括最后登录时间lastDate、登录次数loginNum
+     * @param userid  用户编号
+     * @param lockTag 修改后的冻结状态
+     * @description 修改冻结状态
+     */
+    public void updateLock(int userid, String lockTag) throws SQLException {
+        String sql = "UPDATE t_user SET lockTag = ? WHERE userid = ?";
+        Connection conn = JdbcUtil.getConnection();
+        QueryRunner runner = new QueryRunner();
+        try {
+            runner.update(conn, sql, lockTag, userid);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+    }
+
+    /**
+     * @param userid   用户编号
+     * @param lastDate 登录时间
+     * @param loginNum 登录次数
+     * @description 修改登录参数，包括最后登录时间lastDate、登录次数loginNum
      */
     public void updateLoginParams(int userid, Date lastDate, int loginNum) throws SQLException {
         String sql = "UPDATE t_user SET lastDate = ?, loginNum = ? WHERE userid = ?";
